@@ -6,7 +6,7 @@
 
 {% block navlinks %}
 <li class="nav-item">
-  <a class="nav-link" href="{{ url_for('patient_dashboard') }}">Home</a>
+  <a class="nav-link" href="{{ url_for('patient.patient_dashboard') }}">Home</a>
 </li>
 {% endblock %}
 
@@ -29,11 +29,11 @@
                     <tr>
                         <td>{{ doct.user.name }}</td>
                         <td>
-                            <a href="{{ url_for('check_availability', doctor_id=doct.user_id) }}"
+                            <a href="{{ url_for('patient.check_availability', doctor_id=doct.user_id) }}"
                             class="btn btn-outline-primary btn-sm">Check Availability</a>
                         </td>
                         <td>
-                            <a href="{{ url_for('doctor_details', doct_id=doct.user_id) }}"
+                            <a href="{{ url_for('patient.doctor_details', doct_id=doct.user_id) }}"
                             class="btn btn-outline-primary btn-sm">View Details</a>
                         </td>
                     </tr>
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <a href="{{ url_for('patient_dashboard') }}"
+    <a href="{{ url_for('patient.patient_dashboard') }}"
     class="btn btn-outline-primary btn-sm">Go back</a>
 </div>
 

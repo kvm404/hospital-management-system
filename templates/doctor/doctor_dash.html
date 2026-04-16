@@ -32,11 +32,11 @@
               <td>{% if ap.slot.time == 'morning' %}8am-12pm{% else %}4pm-9pm{% endif %}</td>
               <td>{{ ap.patient.name }}</td>
               <td>
-                <a href="{{ url_for('add_treatment_details', id=ap.id)}}" 
+                <a href="{{ url_for('doctor.add_treatment_details', id=ap.id)}}" 
                 class="btn btn-outline-primary btn-sm {% if ap.treatment %} disabled {% endif %}">Update</a>
               </td>
               <td class="text-center">
-                <form method="POST" action="{{ url_for('mark_appointment', id=ap.id) }}" style="display:inline;">
+                <form method="POST" action="{{ url_for('doctor.mark_appointment', id=ap.id) }}" style="display:inline;">
                   <span title="Make sure you have updated treatment details!">
                     <button
                       class="btn btn-sm {% if ap.treatment %}btn-success{% else %}btn-dark{% endif %}"
@@ -47,7 +47,7 @@
                   </span>
                 </form>
 
-                <form method="POST" action="{{ url_for('cancel_appointment', id=ap.id) }}" style="display:inline;">
+                <form method="POST" action="{{ url_for('patient.cancel_appointment', id=ap.id) }}" style="display:inline;">
                   <span title="You can't cancel if you have updated treatment.">
                     <button
                       class="btn btn-danger btn-sm"
@@ -92,7 +92,7 @@
                         <td>{{tr.created_at.strftime('%d/%m/%Y') }}</td>
                         <td>{{tr.appointment.patient.name}}</td>
                         <td>
-                          <a href="{{ url_for('patient_history', id=tr.appointment.patient_id)}}" 
+                          <a href="{{ url_for('doctor.patient_history', id=tr.appointment.patient_id)}}" 
                           class="btn btn-outline-primary btn-sm">View history</a>
                         </td>
                     </tr>
@@ -109,7 +109,7 @@
 </div>
 <div>
   <br>
-  <a href="{{ url_for('update_availability', user_id=current_user.id) }}" class="btn btn-outline-primary ms-3">Provide Availability</a>
+  <a href="{{ url_for('doctor.update_availability', user_id=current_user.id) }}" class="btn btn-outline-primary ms-3">Provide Availability</a>
 </div>
 </div>
 

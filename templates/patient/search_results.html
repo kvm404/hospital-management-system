@@ -3,7 +3,7 @@
 
 {% block navlinks %}
 <li class="nav-item">
-  <a class="nav-link" href="{{ url_for('patient_dashboard') }}">Home</a>
+  <a class="nav-link" href="{{ url_for('patient.patient_dashboard') }}">Home</a>
 </li>
 {% endblock %}
 
@@ -28,12 +28,12 @@
                         <td class="fw-bold">{{ doc.user.name }}</td>
                         <td>{{ doc.department.name }}</td>
                         <td class="text-center">
-                            <a href="{{ url_for('check_availability', doctor_id=doc.user_id) }}" 
+                            <a href="{{ url_for('patient.check_availability', doctor_id=doc.user_id) }}" 
                                class="btn btn-outline-success btn-sm me-2">
                                Check Availability
                             </a>
                             
-                            <a href="{{ url_for('doctor_details', doct_id=doc.user_id) }}" 
+                            <a href="{{ url_for('patient.doctor_details', doct_id=doc.user_id) }}" 
                                class="btn btn-outline-primary btn-sm">
                                View Details
                             </a>
@@ -49,7 +49,7 @@
             </div>
         {% endif %}
 
-        <a href="{{ url_for('patient_dashboard') }}"
+        <a href="{{ url_for('patient.patient_dashboard') }}"
         class="btn btn-outline-primary btn-sm">Go back</a>
     </div>
 </div>
