@@ -1,21 +1,44 @@
 {% extends 'base.html' %}
-{% block subtitle %}Doctor Details{% endblock %}
+{% block subtitle %}Dr. {{doctor.user.name}}{% endblock %}
 
-<!-- Navbar -->
-{% block navbrand %}Department of <strong>{{doctor.department.name | capitalize}}</strong>{% endblock %}
-
-{% block navlinks %}
-<li class="nav-item">
-  <a class="nav-link" href="{{ url_for('patient.patient_dashboard') }}">Home</a>
-</li>
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Doctor Profile</span>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5 p-3 bg-white">
-    <h3>{{doctor.user.name}}</h3>
-    <p class="ms-3 mb-5">{{doctor.description}}</p>
-    <a href="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}" class="btn btn-outline-primary btn-sm">Check Availability</a>
-    <a href="{{ url_for('patient.department_details', dept_id=doctor.department.id) }}"
-    class="btn btn-outline-primary btn-sm">Go back</a>
+<div class="container py-5">
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="dashboard-card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <div class="bg-light p-4 text-center border-bottom">
+                    <div class="bg-primary mx-auto rounded-circle d-flex justify-content-center align-items-center mb-3 shadow" style="width: 100px; height: 100px;">
+                        <span class="fs-1 text-white">👨‍⚕️</span>
+                    </div>
+                    <h2 class="fw-bolder mb-1">Dr. {{doctor.user.name}}</h2>
+                    <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fs-6">{{doctor.department.name}} Department</span>
+                </div>
+                
+                <div class="p-5">
+                    <h5 class="fw-bold mb-3 text-uppercase small text-muted">About the Doctor</h5>
+                    <p class="fs-5 text-dark" style="line-height: 1.8;">
+                        {{doctor.description}}
+                    </p>
+                    
+                    <hr class="my-4 text-muted opacity-25">
+                    
+                    <div class="d-flex gap-3">
+                        <a href="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}" class="btn modern-btn-primary fs-5 py-2 px-4 rounded-pill shadow-sm flex-fill text-center">
+                            Book Consultation
+                        </a>
+                        <a href="{{ url_for('patient.department_details', dept_id=doctor.department.id) }}" class="btn btn-outline-secondary fs-5 py-2 px-4 rounded-pill flex-fill text-center">
+                            Go Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

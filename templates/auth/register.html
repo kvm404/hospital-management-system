@@ -1,35 +1,57 @@
 {% extends 'base.html' %}
-{% block title %}Patient: Register{% endblock %}
-
+{% block title %}Join MedCare{% endblock %}
 
 {% block content %}
-<div id="form-body" style="height: 580px; margin-top: 40px">
-    <h3 class="text-center">Register</h3>
-    <form method="POST">
-        <div class="mb-3">
-            <label for="username" class="form-label">Name</label>
-            <input type="text" class="form-control" name="username" id="username" required>
+<div class="auth-wrapper" style="background-color: #f8fafd; padding: 3rem 1rem;">
+    <div class="auth-card animate-fade-up">
+        <!-- Sidebar Graphic -->
+        <div class="auth-sidebar d-none d-md-flex position-relative overflow-hidden" style="background: linear-gradient(135deg, #17a2b8 0%, #00f2fe 100%);">
+            <div class="position-relative" style="z-index: 2;">
+                <div class="badge rounded-pill bg-white text-info mb-4 px-3 py-2 fw-bold shadow-sm">
+                    MedCare
+                </div>
+                <h2 class="fw-bolder display-6 mb-3">Start your journey.</h2>
+                <p class="fs-5 opacity-75">Create an account to quickly access specialists and manage your appointments.</p>
+            </div>
+            <div class="position-absolute" style="width: 300px; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%; top: -50px; right: -50px;"></div>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" id="email" required>
+
+        <!-- Form Area -->
+        <div class="auth-form-area d-flex flex-column justify-content-center">
+            <div class="mb-4 text-center">
+                <h3 class="fw-bolder mb-2 text-dark">Register Account</h3>
+                <p class="text-muted">Join as a new patient</p>
+            </div>
+            
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold text-muted small text-uppercase">Full Name</label>
+                    <input type="text" class="modern-input w-100" name="username" id="username" placeholder="John Doe" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold text-muted small text-uppercase">Email Address</label>
+                    <input type="email" class="modern-input w-100" name="email" id="email" placeholder="john@example.com" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label fw-semibold text-muted small text-uppercase">Phone Number</label>
+                    <input type="text" class="modern-input w-100" name="phone" id="phone" placeholder="+123456789">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pass" class="form-label fw-semibold text-muted small text-uppercase">Password</label>
+                        <input type="password" class="modern-input w-100" name="pass" id="pass" placeholder="••••••••" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="cpass" class="form-label fw-semibold text-muted small text-uppercase">Confirm</label>
+                        <input type="password" class="modern-input w-100" name="cpass" id="cpass" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <button type="submit" class="btn modern-btn-primary w-100 py-3 rounded-pill fs-5 shadow-sm mb-3">Create Account</button>
+                    <p class="text-muted">Already registered? <a href="{{url_for('auth.login')}}" class="text-info fw-bold text-decoration-none">Sign in instead</a></p>
+                </div>
+            </form> 
         </div>
-        <div class="mb-3">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" name="phone" id="phone">
-        </div>
-        <div class="mb-3">
-            <label for="pass" class="form-label">Password</label>
-            <input type="password" class="form-control" name="pass" id="pass" required>
-        </div>
-        <div class="mb-3">
-            <label for="cpass" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" name="cpass" id="cpass" required>
-        </div>
-        <div class="text-center">
-            Already registered? <a href="{{url_for('auth.login')}}">Login</a><br>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </div>
-    </form> 
- </div>
-{% endblock %}    
+    </div>
+</div>
+{% endblock %}

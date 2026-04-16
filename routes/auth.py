@@ -5,7 +5,7 @@ from models import db, User
 auth_bp = Blueprint('auth', __name__)
 
 # REGISTER 
-@auth_bp.route('/', methods=["GET", "POST"])
+@auth_bp.route('/register', methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for(f"{current_user.role}.{current_user.role}_dashboard"))

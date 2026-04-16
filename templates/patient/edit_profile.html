@@ -1,49 +1,71 @@
 {% extends 'base.html' %}
 {% block subtitle %}Edit Profile{% endblock %}
-{% block navbar %}{% endblock %}
+
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Profile Settings</span>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4" style="width: 500px;">
+<div class="container py-5" style="max-width: 800px;">
     
-    <h4 class="text-muted">Patient Name: {{patient.name}}</h4>
-
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Edit Profile</h4>
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bolder mb-0 text-dark">Account Details</h2>
+            <p class="text-muted fs-5">Update your personal information and security settings.</p>
         </div>
-        <div class="card-body">
+        <div>
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Back</a>
+            {% else %}
+                <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mt-4">
+        <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 5px;"></div>
+        
+        <div class="card-body p-4 p-md-5">
+            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-4" style="width: 80px; height: 80px;">
+                    <span class="fs-1">👤</span>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-1">{{ patient.name }}</h4>
+                    <p class="text-muted mb-0">{{ patient.email }}</p>
+                </div>
+            </div>
+
             <form method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" class="form-control" name="name" 
-                           value="{{ patient.name }}" required>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Full Name</label>
+                        <input type="text" class="modern-input w-100" name="name" value="{{ patient.name }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Email Address</label>
+                        <input type="email" class="modern-input w-100" name="email" value="{{ patient.email }}" required>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Phone Number</label>
+                        <input type="text" class="modern-input w-100" name="phone" value="{{ patient.phone }}">
+                    </div>
+
+                    <div class="col-12 mt-4 pt-3 border-top">
+                        <h5 class="fw-bold mb-3 text-dark">Security</h5>
+                    </div>
+
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">New Password</label>
+                        <input type="password" class="modern-input w-100" name="new_password" placeholder="Leave blank to keep current password">
+                        <div class="form-text mt-2"><i class="bi bi-info-circle"></i> We recommend a strong password with at least 8 characters.</div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" name="email" 
-                           value="{{ patient.email }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" name="phone" 
-                           value="{{ patient.phone }}">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">New Password</label>
-                    <input type="password" class="form-control" name="new_password" 
-                           placeholder="Leave blank to keep current password">
-                </div>
-
-                <div class="d-flex justify-content-between mt-4">
-                    {% if current_user.role == 'admin' %}
-                        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Back to Admin Dashboard</a>
-                    {% else %}
-                        <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
-                    {% endif %}
-                    <button type="submit" class="btn btn-success">Save Changes</button>
+                <div class="d-flex justify-content-end mt-5 pt-3 border-top">
+                    <button type="submit" class="btn modern-btn-primary rounded-pill px-5 py-2 shadow-sm fs-5">Save Changes</button>
                 </div>
             </form>
         </div>

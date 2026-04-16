@@ -1,70 +1,88 @@
 {% extends 'base.html' %}
 {% block subtitle %}Medical History{% endblock %}
-{% block navbrand %}Medical History{% endblock %}
+
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Medical History</span>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h4 class="text-muted">Patient Name: {{patient.name}}</h4>
+<div class="container py-5">
     
-    <div class="card p-3 shadow-sm">
-        {% if appointments %}
-        <div class="table-responsive" style="max-height: 400px;">
-            <table class="table table-hover table-bordered align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th style="width: 15%">Date</th>
-                        <th style="width: 20%">Doctor</th>
-                        <th style="width: 25%">Diagnosis</th>
-                        <th style="width: 40%">Treatment Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ap in appointments %}
-                    <tr>
-                        <td>
-                            <strong>{{ ap.slot.date.strftime('%d/%m/%Y') }}</strong><br>
-                            {% if ap.slot.time == 'morning' %}
-                                <span class="text-muted small">Morning</span>
-                            {% else %}
-                                <span class="text-muted small">Evening</span>
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            {{ ap.doctor.user.name }}<br>
-                            <span class="text-muted small">{{ ap.doctor.department.name }}</span>
-                        </td>
-
-                        <td>
-                            <span class="fw-bold text-primary">{{ ap.treatment.visit_type }}</span><br>
-                            {{ ap.treatment.diagnosis }}
-                        </td>
-
-                        <td>
-                            <ul class="list-unstyled small mb-0">
-                                <li><strong>Tests:</strong> {{ ap.treatment.tests_done }}</li>
-                                <li><strong>Medicines:</strong> {{ ap.treatment.medicines }}</li>
-                                <li><strong>Prescriptions:</strong> {{ ap.treatment.prescription }}</li>
-                            </ul>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bolder mb-0 text-dark">{{patient.name}}'s Records</h2>
+            <p class="text-muted fs-5">Comprehensive medical timeline and past treatments.</p>
         </div>
-        {% else %}
-            <div class="text-danger fw-bold text-center mt-3">
-                <p>No past medical history records!</p>
-            </div>
-        {% endif %}
-        
-        <div class="mt-3">
+        <div>
             {% if current_user.role == 'admin' %}
-                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Back to Admin Dashboard</a>
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Back to Admin</a>
             {% else %}
-                <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Back to Dashboard</a>
             {% endif %}
         </div>
     </div>
+
+    {% if appointments %}
+        <div class="position-relative ps-4" style="border-left: 3px solid #e9ecef;">
+            {% for ap in appointments %}
+                <div class="dashboard-card border-0 shadow-sm rounded-4 mb-4 position-relative z-1" style="margin-left: 1.5rem;">
+                    <!-- Timeline dot -->
+                    <div class="position-absolute bg-primary rounded-circle shadow-sm" style="width: 16px; height: 16px; left: -2.05rem; top: 1.5rem; border: 3px solid white;"></div>
+                    
+                    <div class="row g-0">
+                        <div class="col-md-3 border-end pe-4 d-flex flex-column justify-content-center">
+                            <h5 class="fw-bold text-primary mb-1">{{ ap.slot.date.strftime('%B %d, %Y') }}</h5>
+                            <span class="text-muted fw-semibold small text-uppercase">{% if ap.slot.time == 'morning' %} Morning Session {% else %} Evening Session {% endif %}</span>
+                            
+                            <hr class="text-muted opacity-25">
+                            
+                            <div class="d-flex align-items-center mt-2">
+                                <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px;">👨‍⚕️</div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">{{ ap.doctor.user.name }}</h6>
+                                    <small class="text-muted">{{ ap.doctor.department.name }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-9 ps-md-4 pt-3 pt-md-0">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="fw-bolder mb-0">{{ ap.treatment.diagnosis }}</h4>
+                                <span class="badge bg-info-soft px-3 py-2 rounded-pill fs-6">{{ ap.treatment.visit_type }}</span>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="p-3 bg-light rounded-3 h-100">
+                                        <div class="fw-bold text-muted small text-uppercase mb-2">Tests Performed</div>
+                                        <p class="mb-0 fw-medium">{{ ap.treatment.tests_done or 'No specific tests recorded' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="p-3 bg-light rounded-3 h-100">
+                                        <div class="fw-bold text-muted small text-uppercase mb-2">Prescribed Medicines</div>
+                                        <p class="mb-0 fw-medium">{{ ap.treatment.medicines or 'None' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-3 bg-light rounded-3">
+                                        <div class="fw-bold text-muted small text-uppercase mb-2">Detailed Prescription & Notes</div>
+                                        <p class="mb-0 lh-lg">{{ ap.treatment.prescription or 'No additional notes provided by the doctor.' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="dashboard-card p-5 text-center border-0 shadow-sm rounded-4 bg-white mt-4">
+            <span class="display-1 text-muted opacity-25 mb-3 d-block">📜</span>
+            <h5 class="fw-bold text-dark">No Medical History</h5>
+            <p class="text-muted mb-0">There are no completed appointments or treatments recorded yet.</p>
+        </div>
+    {% endif %}
+
 </div>
 {% endblock %}

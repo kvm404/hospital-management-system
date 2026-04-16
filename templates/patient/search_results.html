@@ -1,56 +1,60 @@
 {% extends 'base.html' %}
 {% block subtitle %}Search Results{% endblock %}
+{% block title %}Search Results{% endblock %}
 
-{% block navlinks %}
-<li class="nav-item">
-  <a class="nav-link" href="{{ url_for('patient.patient_dashboard') }}">Home</a>
-</li>
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Search Results</span>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h3 class="mb-4">Search Results for "<span class="text-primary">{{ q }}</span>"</h3>
-
-    <div class="card shadow-sm p-3">
-        {% if doctors %}
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Doctor Name</th>
-                        <th>Department</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for doc in doctors %}
-                    <tr>
-                        <td class="fw-bold">{{ doc.user.name }}</td>
-                        <td>{{ doc.department.name }}</td>
-                        <td class="text-center">
-                            <a href="{{ url_for('patient.check_availability', doctor_id=doc.user_id) }}" 
-                               class="btn btn-outline-success btn-sm me-2">
-                               Check Availability
-                            </a>
-                            
-                            <a href="{{ url_for('patient.doctor_details', doct_id=doc.user_id) }}" 
-                               class="btn btn-outline-primary btn-sm">
-                               View Details
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="container py-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bolder mb-0 text-dark">Search Results for "{{ q }}"</h2>
+            <p class="text-muted fs-5">Showing matched doctors and specialists.</p>
         </div>
-        {% else %}
-            <div class="text-danger text-center">
-                No doctors found matching "{{ q }}". Try searching for a different name or specialization.
-            </div>
-        {% endif %}
-
-        <a href="{{ url_for('patient.patient_dashboard') }}"
-        class="btn btn-outline-primary btn-sm">Go back</a>
+        <div>
+            <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+        </div>
     </div>
+
+    {% if doctors %}
+        <div class="row g-4">
+            {% for doc in doctors %}
+            <div class="col-md-6 col-lg-4">
+                <div class="dashboard-card h-100 border-0 shadow-sm rounded-4 text-center p-4 position-relative overflow-hidden" style="transition: transform 0.2s;">
+                    <!-- top accent -->
+                    <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
+                    
+                    <div class="bg-primary-soft rounded-circle mx-auto d-flex justify-content-center align-items-center mb-3 mt-2" style="width: 80px; height: 80px;">
+                        <span class="fs-1">👨‍⚕️</span>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-1">{{ doc.user.name }}</h5>
+                    <p class="text-muted mb-3">{{ doc.department.name }} Department</p>
+                    
+                    <div class="d-flex flex-column gap-2 mt-auto">
+                        <a href="{{ url_for('patient.check_availability', doctor_id=doc.user_id) }}" 
+                           class="btn modern-btn-primary rounded-pill w-100 fw-semibold">
+                           Book Appointment
+                        </a>
+                        <a href="{{ url_for('patient.doctor_details', doct_id=doc.user_id) }}" 
+                           class="btn btn-outline-primary rounded-pill w-100">
+                           View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="dashboard-card p-5 text-center border-0 shadow-sm rounded-4 bg-white mt-4 max-w-lg mx-auto">
+            <span class="display-1 text-muted opacity-25 mb-3 d-block">🔍</span>
+            <h5 class="fw-bold text-dark">No Results Found</h5>
+            <p class="text-muted mb-0">We couldn't find any doctors matching "{{ q }}".</p>
+        </div>
+    {% endif %}
+
 </div>
 {% endblock %}
