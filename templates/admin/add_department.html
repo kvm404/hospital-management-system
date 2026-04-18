@@ -1,33 +1,55 @@
 {% extends 'base.html' %}
 {% block subtitle %}Add Department{% endblock %}
 
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Facility Management</span>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">Add New Department</h4>
+<div class="container py-5" style="max-width: 700px;">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bolder mb-0 text-dark">Add Department</h2>
+            <p class="text-muted fs-5">Register a new medical division.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+        </div>
+    </div>
+
+    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mt-4">
+        <div class="position-absolute top-0 start-0 w-100 bg-dark" style="height: 5px;"></div>
+        
+        <div class="card-body p-4 p-md-5">
+            <div class="d-flex align-items-center mb-4 pb-4 border-bottom">
+                <div class="bg-light rounded-circle d-flex justify-content-center align-items-center me-4 shadow-sm" style="width: 70px; height: 70px;">
+                    <span class="fs-2">🏥</span>
                 </div>
-                <div class="card-body">
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label class="form-label">Department Name</label>
-                            <input type="text" class="form-control" name="name" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control" name="description" rows="3" required></textarea>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-4">
-                            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary me-2">Cancel</a>
-                            <button type="submit" class="btn btn-dark">Add Department</button>
-                        </div>
-                    </form>
+                <div>
+                    <h5 class="fw-bold mb-1 text-dark">Department Configuration</h5>
+                    <p class="text-muted mb-0 small">Enter details for the new department.</p>
                 </div>
             </div>
+
+            <form method="POST">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Department Name</label>
+                        <input type="text" class="modern-input w-100" name="name" placeholder="e.g. Cardiology" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Description</label>
+                        <textarea class="modern-input w-100" name="description" rows="4" placeholder="Overview of the department's focus..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-5 pt-4 border-top gap-3">
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-light rounded-pill px-4 py-2 fs-6 fw-semibold">Cancel</a>
+                    <button type="submit" class="btn btn-dark rounded-pill px-5 py-2 shadow-sm fs-6 fw-semibold">Register Department</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

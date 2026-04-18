@@ -1,89 +1,142 @@
 {% extends 'base.html' %}
 {% block subtitle %}Admin Dashboard{% endblock %}
-{% block navbrand %}Welcome <strong>{{ current_user.name }}</strong>{% endblock %}
+
+{% block navbrand %}
+<a href="{{ url_for('admin.admin_dashboard') }}" class="navbar-brand h1 mb-0 fw-bolder text-primary" style="letter-spacing: -0.5px;">+ MedCare Admin</a>
+{% endblock %}
+
+{% block navlinks %}
+<li class="nav-item me-2">
+  <a class="nav-link fw-semibold" href="{{ url_for('admin.add_department') }}">+ New Department</a>
+</li>
+<li class="nav-item me-2">
+  <a class="nav-link fw-semibold" href="{{ url_for('admin.add_doctor') }}">+ New Doctor</a>
+</li>
+{% endblock %}
 
 {% block content %}
-<div class="container-fluid p-4">
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-secondary shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Total Doctors</h5>
-                    <p class="display-6 fw-bold mb-0">{{ total_doctors }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-secondary shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Total Patients</h5>
-                    <p class="display-6 fw-bold mb-0">{{ total_patients }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-secondary shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Total Treatments</h5>
-                    <p class="display-6 fw-bold mb-0">{{ total_treatments }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h2>Registered Doctors</h2>
+<div class="container py-5">
+    
+    <!-- Welcome Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 border-bottom pb-4">
         <div>
-            <a href="{{ url_for('admin.add_department') }}" class="btn btn-dark me-2">+ Add Department</a>
-            <a href="{{ url_for('admin.add_doctor') }}" class="btn btn-success">+ Add New Doctor</a>
+            <span class="badge bg-danger-subtle text-danger mb-2 px-3 py-2 rounded-pill border border-danger-subtle">System Administrator</span>
+            <h2 class="fw-bolder display-6 mb-1 text-dark">Welcome back, {{ current_user.name.split(' ')[0] }}!</h2>
+            <p class="text-muted fs-5 mb-0">Overview of system operations and facility metrics.</p>
+        </div>
+        <div class="mt-4 mt-md-0 d-flex gap-2">
+            <a href="{{ url_for('admin.add_department') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm py-2">
+                Add Dept
+            </a>
+            <a href="{{ url_for('admin.add_doctor') }}" class="btn modern-btn-primary rounded-pill px-4 shadow-sm py-2">
+                Add Doctor
+            </a>
         </div>
     </div>
 
-    <form method="GET" class="mb-1" style="max-width: 400px;">
-        <div class="input-group">
-        <input type="text" class="form-control" name="d" 
-               placeholder="Search by Name or Department" 
-               value="{{ request.args.get('d', '') }}">
-        <button class="btn btn-outline-primary" type="submit">Search</button>
-        {% if request.args.get('d') %}
-            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-danger">X</a>
-        {% endif %}
+    <!-- Metrics Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="dashboard-card h-100 border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white">
+                <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 60px; height: 60px;">
+                        <span class="fs-3">👨‍⚕️</span>
+                    </div>
+                    <div>
+                        <p class="text-muted text-uppercase small fw-semibold mb-0">Total Doctors</p>
+                        <h2 class="fw-bolder mb-0 text-dark">{{ total_doctors }}</h2>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card h-100 border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white">
+                <div class="position-absolute top-0 start-0 w-100 bg-info" style="height: 4px;"></div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-info-soft rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 60px; height: 60px;">
+                        <span class="fs-3">🤒</span>
+                    </div>
+                    <div>
+                        <p class="text-muted text-uppercase small fw-semibold mb-0">Total Patients</p>
+                        <h2 class="fw-bolder mb-0 text-dark">{{ total_patients }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card h-100 border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white">
+                <div class="position-absolute top-0 start-0 w-100 bg-success" style="height: 4px;"></div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success-soft rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 60px; height: 60px;">
+                        <span class="fs-3">📝</span>
+                    </div>
+                    <div>
+                        <p class="text-muted text-uppercase small fw-semibold mb-0">Total Treatments</p>
+                        <h2 class="fw-bolder mb-0 text-dark">{{ total_treatments }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="card shadow-sm mb-5">
-        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="sticky-top">
+
+    <!-- Doctors Data Grid -->
+    <div class="dashboard-card p-0 border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-5">
+        <div class="bg-light p-4 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <h4 class="fw-bold mb-0 d-flex align-items-center"><span class="fs-4 me-2">👨‍⚕️</span> Registered Doctors</h4>
+            
+            <form method="GET" class="d-flex">
+                <div class="input-group">
+                    <input type="text" class="form-control modern-input border-end-0 bg-white" name="d" placeholder="Search Doctors..." value="{{ request.args.get('d', '') }}">
+                    <button class="btn btn-white border border-start-0 text-primary fw-semibold bg-white" type="submit">Search</button>
+                    {% if request.args.get('d') %}
+                        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-light border text-danger">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light sticky-top">
                     <tr>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>Email</th> <th>Phone</th> <th class="text-center">Actions</th>
+                        <th class="ps-4 text-muted small text-uppercase">Doctor Profile</th>
+                        <th class="text-muted small text-uppercase">Department</th>
+                        <th class="text-muted small text-uppercase">Contact</th>
+                        <th class="pe-4 text-end text-muted small text-uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if doctors %}
                         {% for doc in doctors %}
                         <tr>
-                            <td class="fw-bold">{{ doc.user.name }}</td>
-                            <td>{{ doc.department.name }}</td>
-                            <td>{{ doc.user.email }}</td>
-                            <td>{{ doc.user.phone or '-' }}</td>
-                            <td class="text-center">
-                                <a href="{{ url_for('doctor.update_availability', user_id=doc.user_id) }}" class="btn btn-sm btn-info">Schedule</a>
-                                <a href="{{ url_for('admin.edit_doctor', user_id=doc.user_id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ url_for('admin.delete_user', user_id=doc.user_id) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger" title="All the associated data will be deleted!!">Delete</button>
+                            <td class="ps-4">
+                                <div class="fw-bold text-dark">{{ doc.user.name }}</div>
+                            </td>
+                            <td><span class="badge bg-primary-soft text-primary px-2 py-1 rounded-pill">{{ doc.department.name }}</span></td>
+                            <td>
+                                <div class="small text-muted">{{ doc.user.email }}</div>
+                                <div class="small text-muted">{{ doc.user.phone or '-' }}</div>
+                            </td>
+                            <td class="pe-4 text-end">
+                                <div class="btn-group shadow-sm">
+                                    <a href="{{ url_for('doctor.update_availability', user_id=doc.user_id) }}" class="btn btn-sm btn-light border" title="Schedule">📅</a>
+                                    <a href="{{ url_for('admin.edit_doctor', user_id=doc.user_id) }}" class="btn btn-sm btn-light border text-warning" title="Edit">✏️</a>
+                                    <a href="{{ url_for('admin.toggle_block', user_id=doc.user_id) }}" class="btn btn-sm btn-light border {% if doc.user.is_blocked %}text-success{% else %}text-secondary{% endif %}" title="Toggle Block">
+                                        {% if doc.user.is_blocked %} 🟢 {% else %} 🛑 {% endif %}
+                                    </a>
+                                </div>
+                                <form action="{{ url_for('admin.delete_user', user_id=doc.user_id) }}" method="POST" class="d-inline-block ms-1">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm rounded" title="Delete Doctor">🗑️</button>
                                 </form>
-                                <a href="{{ url_for('admin.toggle_block', user_id=doc.user_id) }}" 
-                                    class="btn btn-sm {% if doc.user.is_blocked %}btn-success{% else %}btn-dark{% endif %}">
-                                    {% if doc.user.is_blocked %} Unblock {% else %} Block {% endif %}
-                                </a>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
-                        <tr><td colspan="5" class="text-center text-muted">No doctors registered.</td></tr>
+                        <tr><td colspan="4" class="p-4 text-center text-muted">No doctors registered or found matching search.</td></tr>
                     {% endif %}
                 </tbody>
             </table>
@@ -91,51 +144,54 @@
     </div>
 
 
-    <h2 class="mb-2">Registered Patients</h2>
-    <form method="GET" class="mb-1" style="max-width: 400px;">
-        <div class="input-group">
-            <input type="text" class="form-control" name="p" 
-                   placeholder="Search by Name, Email or Phone" 
-                   value="{{ request.args.get('p', '') }}">
-            <button class="btn btn-outline-primary" type="submit">Search</button>
-            {% if request.args.get('p') %}
-                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-danger">X</a>
-            {% endif %}
+    <!-- Patients Data Grid -->
+    <div class="dashboard-card p-0 border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-5">
+        <div class="bg-light p-4 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <h4 class="fw-bold mb-0 d-flex align-items-center"><span class="fs-4 me-2">🤕</span> Registered Patients</h4>
+            
+            <form method="GET" class="d-flex">
+                <div class="input-group">
+                    <input type="text" class="form-control modern-input border-end-0 bg-white" name="p" placeholder="Search Patients..." value="{{ request.args.get('p', '') }}">
+                    <button class="btn btn-white border border-start-0 text-info fw-semibold bg-white" type="submit">Search</button>
+                    {% if request.args.get('p') %}
+                        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-light border text-danger">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
         </div>
-    </form>
-
-    <div class="card shadow-sm mb-5">
-        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="sticky-top">
+        
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light sticky-top">
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th class="text-center">Actions</th>
+                        <th class="ps-4 text-muted small text-uppercase">Patient Name</th>
+                        <th class="text-muted small text-uppercase">Email</th>
+                        <th class="text-muted small text-uppercase">Phone</th>
+                        <th class="pe-4 text-end text-muted small text-uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if patients %}
                         {% for p in patients %}
                         <tr>
-                            <td>{{ p.name }}</td>
-                            <td>{{ p.email }}</td>
-                            <td>{{ p.phone or '-' }}</td>
-                            <td class="text-center">
-                                <a href="{{ url_for('patient.edit_profile', id=p.id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ url_for('admin.delete_user', user_id=p.id) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger" title="All the associated data will be deleted!!">Delete</button>
+                            <td class="ps-4 fw-bold text-dark">{{ p.name }}</td>
+                            <td class="text-muted">{{ p.email }}</td>
+                            <td class="text-muted">{{ p.phone or '-' }}</td>
+                            <td class="pe-4 text-end">
+                                <div class="btn-group shadow-sm">
+                                    <a href="{{ url_for('patient.edit_profile', id=p.id) }}" class="btn btn-sm btn-light border text-warning" title="Edit">✏️</a>
+                                    <a href="{{ url_for('admin.toggle_block', user_id=p.id) }}" class="btn btn-sm btn-light border {% if p.is_blocked %}text-success{% else %}text-secondary{% endif %}" title="Toggle Block">
+                                        {% if p.is_blocked %} 🟢 {% else %} 🛑 {% endif %}
+                                    </a>
+                                </div>
+                                <form action="{{ url_for('admin.delete_user', user_id=p.id) }}" method="POST" class="d-inline-block ms-1">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm rounded" title="Delete Patient">🗑️</button>
                                 </form>
-                                <a href="{{ url_for('admin.toggle_block', user_id=p.id) }}" 
-                                    class="btn btn-sm {% if p.is_blocked %}btn-success{% else %}btn-dark{% endif %}">
-                                    {% if p.is_blocked %} Unblock {% else %} Block {% endif %}
-                                </a>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
-                        <tr><td colspan="4" class="text-center text-muted">No patients registered.</td></tr>
+                        <tr><td colspan="4" class="p-4 text-center text-muted">No patients registered or found matching search.</td></tr>
                     {% endif %}
                 </tbody>
             </table>
@@ -143,84 +199,95 @@
     </div>
 
 
-    <h3 class="mb-2">Upcoming Appointments</h3>
-    <div class="card shadow-sm">
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="sticky-top">
-                    <tr>
-                        <th>Date</th>
-                        <th>Patient Name</th>
-                        <th>Doctor Name</th>
-                        <th>Department</th>
-                        <th>Status</th>
-                        <th>History</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if up_appointments %}
-                        {% for ap in up_appointments %}
-                        <tr>
-                            <td>
-                                {{ ap.slot.date.strftime('%d/%m/%Y') }}
-                                <br>
-                                <span class="badge bg-light text-dark border">{{ ap.slot.time | capitalize }}</span>
-                            </td>
-                            <td>{{ ap.patient.name }}</td>
-                            <td>{{ ap.doctor.user.name }}</td>
-                            <td>{{ ap.doctor.department.name }}</td>
-                            <td>{{ ap.status | capitalize }}</td>
-                            <td>
-                                <a href="{{ url_for('patient.history', id=ap.patient_id) }}" class="btn btn-outline-primary btn-sm">View History</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td colspan="6" class="text-center text-muted">No upcoming appointments.</td></tr>
-                    {% endif %}
-                </tbody>
-            </table>
+    <div class="row g-4">
+        <!-- Upcoming Appointments Data Grid -->
+        <div class="col-xl-6">
+            <div class="dashboard-card p-0 border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                <div class="bg-light p-4 border-bottom">
+                    <h5 class="fw-bold mb-0 d-flex align-items-center"><span class="fs-5 me-2">📅</span> Upcoming Appointments</h5>
+                </div>
+                
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th class="ps-4 text-muted small text-uppercase">Schedule</th>
+                                <th class="text-muted small text-uppercase">Participants</th>
+                                <th class="pe-4 text-end text-muted small text-uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if up_appointments %}
+                                {% for ap in up_appointments %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">{{ ap.slot.date.strftime('%d %b, %Y') }}</div>
+                                        <div class="small text-muted text-uppercase">{{ ap.slot.time }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold text-primary">Dr. {{ ap.doctor.user.name }}</div>
+                                        <div class="small text-muted">{{ ap.patient.name }}</div>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <span class="badge badge-soft-warning px-2 py-1 rounded-pill">{{ ap.status | capitalize }}</span>
+                                        <div class="mt-1">
+                                            <a href="{{ url_for('patient.history', id=ap.patient_id) }}" class="btn btn-link btn-sm p-0 text-decoration-none small">History &rarr;</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="3" class="p-4 text-center text-muted">No upcoming appointments.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
 
-
-    <h3 class="mt-5 mb-2">All Past Appointments</h3>
-    <div class="card shadow-sm mb-5">
-        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="sticky-top">
-                    <tr>
-                        <th>Date</th>
-                        <th>Patient Name</th>
-                        <th>Doctor Name</th>
-                        <th>Department</th>
-                        <th>Status</th>
-                        <th>History</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if past_appointments %}
-                        {% for ap in past_appointments %} 
-                        <tr>
-                            <td>
-                                {{ ap.slot.date.strftime('%d/%m/%Y') }}
-                                <br>
-                                <span class="badge bg-light text-dark border">{{ ap.slot.time | capitalize }}</span>
-                            </td>
-                            <td>{{ ap.patient.name }}</td>
-                            <td>{{ ap.doctor.user.name }}</td>
-                            <td>{{ ap.doctor.department.name }}</td>
-                            <td>{{ ap.status | capitalize }}</td>
-                            <td>
-                                <a href="{{ url_for('patient.history', id=ap.patient_id) }}" class="btn btn-outline-primary btn-sm">View History</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td colspan="6" class="text-center text-muted">No appointments found.</td></tr>
-                    {% endif %}
-                </tbody>
-            </table>
+        <!-- Past Appointments Data Grid -->
+        <div class="col-xl-6">
+            <div class="dashboard-card p-0 border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                <div class="bg-light p-4 border-bottom">
+                    <h5 class="fw-bold mb-0 d-flex align-items-center"><span class="fs-5 me-2">🕰️</span> Past Appointments</h5>
+                </div>
+                
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th class="ps-4 text-muted small text-uppercase">Schedule</th>
+                                <th class="text-muted small text-uppercase">Participants</th>
+                                <th class="pe-4 text-end text-muted small text-uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if past_appointments %}
+                                {% for ap in past_appointments %} 
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">{{ ap.slot.date.strftime('%d %b, %Y') }}</div>
+                                        <div class="small text-muted text-uppercase">{{ ap.slot.time }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold text-primary">Dr. {{ ap.doctor.user.name }}</div>
+                                        <div class="small text-muted">{{ ap.patient.name }}</div>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <span class="badge badge-soft-success px-2 py-1 rounded-pill">{{ ap.status | capitalize }}</span>
+                                        <div class="mt-1">
+                                            <a href="{{ url_for('patient.history', id=ap.patient_id) }}" class="btn btn-link btn-sm p-0 text-decoration-none small">History &rarr;</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="3" class="p-4 text-center text-muted">No past appointments found.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

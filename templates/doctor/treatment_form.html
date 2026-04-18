@@ -1,48 +1,71 @@
 {% extends 'base.html' %}
-{% block subtitle %}Treatment details{% endblock %}
+{% block subtitle %}Treatment Details{% endblock %}
 
-<!-- Navbar -->
-{% block navbrand %} <strong>Treatment Details</strong> {% endblock %}
-
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Treatment Log</span>
+{% endblock %}
 
 {% block content %}
-<div class="container m-3 p-2">
-    <h2>Enter Treatment Details</h2>
+<div class="container py-5" style="max-width: 900px;">
     
-    <div class="container m-3">
-        <h5 class="text-muted">Patient Name: {{ appointment.patient.name }}</h5>
-        <h5 class="text-muted">Department Name: {{ appointment.doctor.department.name }}</h5>
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bolder mb-0 text-dark">Log Treatment</h2>
+            <p class="text-muted fs-5">Recording details for patient {{ appointment.patient.name }}.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+        </div>
+    </div>
+
+    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mt-4">
+        <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 5px;"></div>
         
-        <form method="POST">
-            <div class="container bg-white p-2 fw-bold shadow-sm border">
-                <div class="mb-3" style="display: inline-block;">
-                    <label for="visit" class="form-label">Visit Type</label>
-                    <input type="text" class="form-control" name="visit" id="visit" style="width: 200px;" placeholder="e.g. In-Person" required>
+        <div class="card-body p-4 p-md-5">
+            <div class="d-flex align-items-center mb-4 pb-4 border-bottom">
+                <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-4" style="width: 70px; height: 70px;">
+                    <span class="fs-2">📝</span>
                 </div>
-                <div class="mb-3 ms-3"  style="display: inline-block;">
-                    <label for="test" class="form-label">Tests Done</label>
-                    <input type="text" class="form-control" name="test" id="test" placeholder="e.g. Blood Test, X-Ray" required>
-                </div>
-                <br>
-                <div class="mb-3" style="display: inline-block;">
-                    <label for="diagnosis" class="form-label">Diagnosis</label>
-                    <textarea class="form-control" name="diagnosis" id="diagnosis" rows="4" style="width: 500px;" required></textarea>
-                </div>
-                <div class="mb-3 ms-3" style="display: inline-block;">
-                    <label for="medicines" class="form-label">Medicines</label>
-                    <textarea class="form-control" name="medicines" id="medicines" rows="4" style="width: 500px;" required></textarea>
-                </div>
-                <br>
-                <div class="mb-3" style="display: inline-block;">
-                    <label for="prescription" class="form-label">Prescription</label>
-                    <textarea class="form-control" name="prescription" id="prescription" rows="4" style="width: 500px;" required></textarea>
+                <div>
+                    <h5 class="fw-bold mb-1">Patient: {{ appointment.patient.name }}</h5>
+                    <p class="text-muted mb-0">Department: {{ appointment.doctor.department.name }}</p>
                 </div>
             </div>
-            <div class="d-flex justify-content-end">
-                <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-secondary mt-2 me-2">Cancel</a>
-                <button type="submit" class="btn btn-success mt-2">Save</button>
-            </div>
-        </form>
+
+            <form method="POST">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="visit" class="form-label fw-semibold text-muted small text-uppercase">Visit Type</label>
+                        <input type="text" class="modern-input w-100" name="visit" id="visit" placeholder="e.g. In-Person, Follow-up" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="test" class="form-label fw-semibold text-muted small text-uppercase">Tests Done</label>
+                        <input type="text" class="modern-input w-100" name="test" id="test" placeholder="e.g. Blood Test, X-Ray" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="diagnosis" class="form-label fw-semibold text-muted small text-uppercase">Diagnosis</label>
+                        <textarea class="modern-input w-100" name="diagnosis" id="diagnosis" rows="3" placeholder="Enter clinical diagnosis" required></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="medicines" class="form-label fw-semibold text-muted small text-uppercase">Medicines</label>
+                        <textarea class="modern-input w-100" name="medicines" id="medicines" rows="2" placeholder="List prescribed medications" required></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="prescription" class="form-label fw-semibold text-muted small text-uppercase">Prescription & Notes</label>
+                        <textarea class="modern-input w-100" name="prescription" id="prescription" rows="4" placeholder="Detailed notes for the patient" required></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-5 pt-4 border-top gap-3">
+                    <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-light rounded-pill px-4 py-2 fs-5">Cancel</a>
+                    <button type="submit" class="btn modern-btn-primary rounded-pill px-5 py-2 shadow-sm fs-5">Save Record</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

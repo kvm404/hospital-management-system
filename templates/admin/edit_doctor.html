@@ -1,45 +1,66 @@
 {% extends 'base.html' %}
-{% block subtitle %}Edit Doctor{% endblock %}
+{% block subtitle %}Edit Doctor Profile{% endblock %}
+
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Staff Management</span>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Edit Doctor Profile</h4>
+<div class="container py-5" style="max-width: 800px;">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bolder mb-0 text-dark">Edit Doctor</h2>
+            <p class="text-muted fs-5">Updating profile for Dr. {{ doctor.user.name }}</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+        </div>
+    </div>
+
+    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mt-4">
+        <div class="position-absolute top-0 start-0 w-100 bg-warning" style="height: 5px;"></div>
+        
+        <div class="card-body p-4 p-md-5">
+            <div class="d-flex align-items-center mb-5 pb-4 border-bottom">
+                <div class="bg-warning rounded-circle d-flex justify-content-center align-items-center me-4 shadow-sm" style="width: 70px; height: 70px;">
+                    <span class="fs-2 text-white">✏️</span>
                 </div>
-                <div class="card-body">
-                    <form method="POST">
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Doctor Name</label>
-                            <input type="text" class="form-control" name="name" value="{{ doctor.user.name }}" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Department</label>
-                            <select class="form-select" name="dept_id" required>
-                                {% for dept in departments %}
-                                    <option value="{{ dept.id }}" {% if dept.id == doctor.dept_id %}selected{% endif %}>
-                                        {{ dept.name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Doctor's Bio</label>
-                            <textarea class="form-control" name="description" rows="4" required>{{ doctor.description }}</textarea>
-                        </div>
-
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </div>
-                    </form>
+                <div>
+                    <h5 class="fw-bold mb-1 text-dark">Professional Details Configuration</h5>
+                    <p class="text-muted mb-0 small">Update department routing and bio details.</p>
                 </div>
             </div>
+
+            <form method="POST">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Doctor Name</label>
+                        <input type="text" class="modern-input w-100" name="name" value="{{ doctor.user.name }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Assigned Department</label>
+                        <select class="modern-input w-100 bg-light" name="dept_id" required>
+                            {% for dept in departments %}
+                                <option value="{{ dept.id }}" {% if dept.id == doctor.dept_id %}selected{% endif %}>
+                                    {{ dept.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold text-muted small text-uppercase">Doctor's Bio</label>
+                        <textarea class="modern-input w-100" name="description" rows="5" required>{{ doctor.description }}</textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-5 pt-4 border-top gap-3">
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-light rounded-pill px-4 py-2 fs-6 fw-semibold">Cancel</a>
+                    <button type="submit" class="btn btn-warning text-dark rounded-pill px-5 py-2 shadow-sm fs-6 fw-bold">Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -1,54 +1,74 @@
 {% extends 'base.html' %}
 {% block subtitle %}Patient history{% endblock %}
-{% block navbar %}{% endblock %}
+
+{% block navbrand %}
+<span class="fs-4 fw-bolder text-dark">Patient Record</span>
+{% endblock %}
 
 {% block content %}
-<div class="container m-5">
-    <h2>Patient History</h2> 
-    <div class="container my-3 ms-5">
-        <h5>Patient Name: {{patient.name}}</h5>
-        <h5>Doctor Name: {{ current_user.name }}</h5>
-        <h5>Department Name: {{ current_user.doctor_profile.department.name }}</h5>
-        <div class="table-body" style="max-width: 1000px;">
-            <table class="table table-hover mb-0">      
-                <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Visit Type</th>
-                      <th>Tests Done</th>
-                      <th>Diagnosis</th>
-                      <th>Prescription</th>
-                      <th>Medicines</th>
-                    </tr>
-                </thead>        
-                <tbody>
-                    {% if treatments %}
-                        {% for tr in treatments %}
-                            <tr>
-                                <td>{{tr.created_at.strftime('%d/%m/%Y') }}</td>
-                                <td>{{tr.visit_type}}</td>
-                                <td>{{tr.tests_done}}</td>
-                                <td>{{tr.diagnosis}}</td>
-                                <td>{{tr.prescription}}</td>
-                                <td>{{tr.medicines}}</td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">
-                                No Records.
-                            </td>
-                        </tr>
-                  {% endif %}
-                </tbody>
-            </table>
+<div class="container py-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bolder mb-0 text-dark">{{patient.name}}'s History</h2>
+            <p class="text-muted fs-5">Logged by Dr. {{ current_user.name }} ({{ current_user.doctor_profile.department.name }})</p>
         </div>
+        <div>
+            <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Back to Dashboard</a>
+        </div>
+    </div>
 
-    </div>
-    <div>
-        <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-primary mt-5">Go back</a>
-    </div>
+    {% if treatments %}
+        <div class="position-relative ps-4" style="border-left: 3px solid #e9ecef;">
+            {% for tr in treatments %}
+                <div class="dashboard-card border-0 shadow-sm rounded-4 mb-4 position-relative z-1" style="margin-left: 1.5rem;">
+                    <!-- Timeline dot -->
+                    <div class="position-absolute bg-primary rounded-circle shadow-sm" style="width: 16px; height: 16px; left: -2.05rem; top: 1.5rem; border: 3px solid white;"></div>
+                    
+                    <div class="row g-0">
+                        <div class="col-md-3 border-end pe-4 d-flex flex-column justify-content-center">
+                            <h5 class="fw-bold text-primary mb-1">{{ tr.created_at.strftime('%B %d, %Y') }}</h5>
+                            <span class="text-muted fw-semibold small text-uppercase">Recorded on</span>
+                        </div>
+                        
+                        <div class="col-md-9 ps-md-4 pt-3 pt-md-0">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="fw-bolder mb-0">{{ tr.diagnosis }}</h4>
+                                <span class="badge bg-info-soft px-3 py-2 rounded-pill fs-6">{{ tr.visit_type }}</span>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="p-3 bg-light rounded-3 h-100">
+                                        <div class="fw-bold text-muted small text-uppercase mb-2">Tests Performed</div>
+                                        <p class="mb-0 fw-medium">{{ tr.tests_done or 'No specific tests recorded' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="p-3 bg-light rounded-3 h-100">
+                                        <div class="fw-bold text-muted small text-uppercase mb-2">Prescribed Medicines</div>
+                                        <p class="mb-0 fw-medium">{{ tr.medicines or 'None' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-3 bg-light rounded-3">
+                                        <div class="fw-bold text-muted small text-uppercase mb-2">Detailed Prescription</div>
+                                        <p class="mb-0 lh-lg">{{ tr.prescription or 'No additional notes provided.' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="dashboard-card p-5 text-center border-0 shadow-sm rounded-4 bg-white mt-4">
+            <span class="display-1 text-muted opacity-25 mb-3 d-block">📜</span>
+            <h5 class="fw-bold text-dark">No Medical History</h5>
+            <p class="text-muted mb-0">You have not recorded any treatments for this patient yet.</p>
+        </div>
+    {% endif %}
+
 </div>
-
-
 {% endblock %}
