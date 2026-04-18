@@ -1,59 +1,59 @@
 {% extends 'base.html' %}
-{% block subtitle %}{{ dept.name }} Department{% endblock %}
-{% block title %}{{ dept.name }}{% endblock %}
-
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">{{ dept.name }} Department</span>
-{% endblock %}
+{% block subtitle %}{{ dept.name }}{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     
-    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mb-5">
-        <div class="position-absolute top-0 start-0 h-100 bg-primary" style="width: 5px;"></div>
-        <div class="card-body p-4 p-md-5 d-flex flex-column flex-md-row align-items-center justify-content-between">
-            <div>
-                <h2 class="fw-bolder mb-2 text-dark">{{ dept.name }} Specialists</h2>
-                <p class="text-muted fs-5 mb-0" style="max-width: 600px;">{{ dept.description }}</p>
+    <!-- Department Info Card -->
+    <div class="hms-card mb-5" style="border-top-width: 4px; border-top-color: var(--hms-primary);">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+            <div class="d-flex align-items-center mb-3 mb-md-0">
+                <div class="hms-icon-circle hms-icon-circle-lg hms-icon-primary me-4">
+                    <i class="bi bi-building"></i>
+                </div>
+                <div>
+                    <h2 class="page-title mb-1">{{ dept.name }} Department</h2>
+                    <p class="body-text mb-0">{{ dept.description }}</p>
+                </div>
             </div>
-            <div class="mt-4 mt-md-0">
-                <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+            <div>
+                <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-outline">
+                    <i class="bi bi-arrow-left me-1"></i> Dashboard
+                </a>
             </div>
         </div>
     </div>
 
-    <h4 class="fw-bold mb-4 d-flex align-items-center">Our Doctors</h4>
-
+    <!-- Doctors Grid -->
+    <h4 class="section-heading mb-4">Available Specialists</h4>
+    
     {% if dept.doctors %}
         <div class="row g-4">
-            {% for doct in dept.doctors %}
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card h-100 border-0 shadow-sm rounded-4 text-center p-4" style="transition: transform 0.2s;">
-                    <div class="bg-primary-soft rounded-circle mx-auto d-flex justify-content-center align-items-center mb-3 mt-2" style="width: 80px; height: 80px;">
-                        <span class="fs-1">👨‍⚕️</span>
-                    </div>
-                    
-                    <h5 class="fw-bold mb-3">{{ doct.user.name }}</h5>
-                    
-                    <div class="d-flex flex-column gap-2 mt-auto">
-                        <a href="{{ url_for('patient.check_availability', doctor_id=doct.user_id) }}" 
-                           class="btn modern-btn-primary rounded-pill w-100 fw-semibold shadow-sm">
-                           Check Availability
-                        </a>
-                        <a href="{{ url_for('patient.doctor_details', doct_id=doct.user_id) }}" 
-                           class="btn btn-light rounded-pill w-100 text-primary fw-semibold">
-                           View Description
-                        </a>
+            {% for doctor in dept.doctors %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="hms-card h-100 d-flex flex-column text-center">
+                        <div class="mb-3 mt-2">
+                            <div class="hms-icon-circle hms-icon-circle-lg hms-icon-primary mx-auto">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                        </div>
+                        
+                        <h4 style="font-size: 1.125rem; font-weight: 700; color: var(--hms-dark); margin-bottom: 4px;">Dr. {{ doctor.user.name }}</h4>
+                        <p style="font-size: 0.875rem; color: var(--hms-muted); margin-bottom: 20px;">{{ doctor.department.name }}</p>
+                        
+                        <div class="mt-auto d-flex flex-column gap-2">
+                            <a href="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}" class="btn hms-btn-primary w-100">Book Consultation</a>
+                            <a href="{{ url_for('patient.doctor_details', doct_id=doctor.user_id) }}" class="btn hms-btn-outline w-100">View Profile</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="dashboard-card p-5 text-center border-0 shadow-sm rounded-4 bg-white mt-4">
-            <span class="display-1 text-muted opacity-25 mb-3 d-block">👨‍⚕️</span>
-            <h5 class="fw-bold text-dark">No Doctors Available</h5>
-            <p class="text-muted mb-0">There are currently no assigned doctors to this department.</p>
+        <div class="hms-card text-center py-5 mt-4">
+            <i class="bi bi-person-x" style="font-size: 2.5rem; color: var(--hms-muted); opacity: 0.5;"></i>
+            <h5 style="font-weight: 600; margin-top: 16px; margin-bottom: 8px;">No Specialists Available</h5>
+            <p class="body-text mb-0">There are currently no doctors assigned to this department.</p>
         </div>
     {% endif %}
 

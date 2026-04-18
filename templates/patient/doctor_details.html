@@ -1,44 +1,32 @@
 {% extends 'base.html' %}
-{% block subtitle %}Dr. {{doctor.user.name}}{% endblock %}
-
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Doctor Profile</span>
-{% endblock %}
+{% block subtitle %}Dr. {{ doctor.user.name }}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="dashboard-card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                <div class="bg-light p-4 text-center border-bottom">
-                    <div class="bg-primary mx-auto rounded-circle d-flex justify-content-center align-items-center mb-3 shadow" style="width: 100px; height: 100px;">
-                        <span class="fs-1 text-white">👨‍⚕️</span>
-                    </div>
-                    <h2 class="fw-bolder mb-1">Dr. {{doctor.user.name}}</h2>
-                    <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fs-6">{{doctor.department.name}} Department</span>
-                </div>
-                
-                <div class="p-5">
-                    <h5 class="fw-bold mb-3 text-uppercase small text-muted">About the Doctor</h5>
-                    <p class="fs-5 text-dark" style="line-height: 1.8;">
-                        {{doctor.description}}
-                    </p>
-                    
-                    <hr class="my-4 text-muted opacity-25">
-                    
-                    <div class="d-flex gap-3">
-                        <a href="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}" class="btn modern-btn-primary fs-5 py-2 px-4 rounded-pill shadow-sm flex-fill text-center">
-                            Book Consultation
-                        </a>
-                        <a href="{{ url_for('patient.department_details', dept_id=doctor.department.id) }}" class="btn btn-outline-secondary fs-5 py-2 px-4 rounded-pill flex-fill text-center">
-                            Go Back
-                        </a>
-                    </div>
-                </div>
+<div class="container py-5 d-flex justify-content-center">
+    <div class="hms-card" style="width: 100%; max-width: 700px;">
+        
+        <div class="text-center mb-5 pb-4" style="border-bottom: 1px solid var(--hms-border);">
+            <div class="hms-icon-circle hms-icon-circle-lg hms-icon-primary mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                <i class="bi bi-person-badge"></i>
             </div>
+            <h2 class="page-title mb-2">Dr. {{ doctor.user.name }}</h2>
+            <span class="hms-badge hms-badge-info">{{ doctor.department.name }}</span>
         </div>
-    </div>
 
+        <div class="mb-5">
+            <h4 class="section-heading mb-3">Professional Bio</h4>
+            <p class="body-text" style="line-height: 1.7;">{{ doctor.description }}</p>
+        </div>
+
+        <div class="d-flex justify-content-between pt-4" style="border-top: 1px solid var(--hms-border);">
+            <button onclick="history.back()" class="btn hms-btn-outline">
+                <i class="bi bi-arrow-left me-1"></i> Go Back
+            </button>
+            <a href="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}" class="btn hms-btn-primary">
+                Book Consultation
+            </a>
+        </div>
+        
+    </div>
 </div>
 {% endblock %}

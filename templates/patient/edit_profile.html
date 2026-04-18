@@ -1,74 +1,57 @@
 {% extends 'base.html' %}
-{% block subtitle %}Edit Profile{% endblock %}
-
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Profile Settings</span>
-{% endblock %}
+{% block subtitle %}Profile Settings{% endblock %}
 
 {% block content %}
-<div class="container py-5" style="max-width: 800px;">
-    
-    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-        <div>
-            <h2 class="fw-bolder mb-0 text-dark">Account Details</h2>
-            <p class="text-muted fs-5">Update your personal information and security settings.</p>
-        </div>
-        <div>
-            {% if current_user.role == 'admin' %}
-                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Back</a>
-            {% else %}
-                <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mt-4">
-        <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 5px;"></div>
+<div class="container py-5 d-flex justify-content-center">
+    <div class="hms-card" style="width: 100%; max-width: 700px;">
         
-        <div class="card-body p-4 p-md-5">
-            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
-                <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-4" style="width: 80px; height: 80px;">
-                    <span class="fs-1">👤</span>
+        <div class="d-flex align-items-center mb-4 pb-4" style="border-bottom: 1px solid var(--hms-border);">
+            <div class="hms-icon-circle hms-icon-circle-lg hms-icon-primary me-4" style="width: 60px; height: 60px; font-size: 2rem;">
+                <i class="bi bi-person-circle"></i>
+            </div>
+            <div>
+                <h2 class="page-title mb-1">Profile Settings</h2>
+                <p class="body-text mb-0">Update your account details and password.</p>
+            </div>
+        </div>
+
+        <form method="POST">
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="hms-label" for="name">Full Name</label>
+                    <input type="text" class="hms-input" id="name" name="name" value="{{ patient.name }}" required>
                 </div>
-                <div>
-                    <h4 class="fw-bold mb-1">{{ patient.name }}</h4>
-                    <p class="text-muted mb-0">{{ patient.email }}</p>
+
+                <div class="col-md-6">
+                    <label class="hms-label" for="phone">Phone Number</label>
+                    <input type="tel" class="hms-input" id="phone" name="phone" value="{{ patient.phone }}">
+                </div>
+
+                <div class="col-12">
+                    <label class="hms-label" for="email">Email Address</label>
+                    <input type="email" class="hms-input" id="email" name="email" value="{{ patient.email }}" required>
                 </div>
             </div>
 
-            <form method="POST">
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small text-uppercase">Full Name</label>
-                        <input type="text" class="modern-input w-100" name="name" value="{{ patient.name }}" required>
-                    </div>
+            <hr style="color: var(--hms-border); margin: 32px 0;">
 
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small text-uppercase">Email Address</label>
-                        <input type="email" class="modern-input w-100" name="email" value="{{ patient.email }}" required>
-                    </div>
+            <div class="mb-4">
+                <h4 class="section-heading mb-3">Security</h4>
+                <label class="hms-label" for="password">New Password</label>
+                <input type="password" class="hms-input" id="password" name="new_password" placeholder="Leave blank to keep current password">
+                <div class="form-text mt-2" style="font-size: 0.8rem; color: var(--hms-muted);">Only fill this if you want to change your password.</div>
+            </div>
 
-                    <div class="col-md-12">
-                        <label class="form-label fw-semibold text-muted small text-uppercase">Phone Number</label>
-                        <input type="text" class="modern-input w-100" name="phone" value="{{ patient.phone }}">
-                    </div>
-
-                    <div class="col-12 mt-4 pt-3 border-top">
-                        <h5 class="fw-bold mb-3 text-dark">Security</h5>
-                    </div>
-
-                    <div class="col-md-12 mb-2">
-                        <label class="form-label fw-semibold text-muted small text-uppercase">New Password</label>
-                        <input type="password" class="modern-input w-100" name="new_password" placeholder="Leave blank to keep current password">
-                        <div class="form-text mt-2"><i class="bi bi-info-circle"></i> We recommend a strong password with at least 8 characters.</div>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end mt-5 pt-3 border-top">
-                    <button type="submit" class="btn modern-btn-primary rounded-pill px-5 py-2 shadow-sm fs-5">Save Changes</button>
-                </div>
-            </form>
-        </div>
+            <div class="d-flex justify-content-end pt-4 mt-2" style="border-top: 1px solid var(--hms-border);">
+                {% if current_user.role == 'admin' %}
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline me-3">Cancel</a>
+                {% else %}
+                    <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-outline me-3">Cancel</a>
+                {% endif %}
+                <button type="submit" class="btn hms-btn-primary">Save Changes</button>
+            </div>
+        </form>
+        
     </div>
 </div>
 {% endblock %}

@@ -1,82 +1,105 @@
 {% extends 'base.html' %}
 {% block subtitle %}Book Appointment{% endblock %}
 
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Schedule Consultation</span>
-{% endblock %}
-
 {% block content %}
-<div class="container py-5" style="max-width: 900px;">
+<div class="container py-5">
     
-    <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-4">
+    <div class="d-flex justify-content-between align-items-center mb-5 pb-3" style="border-bottom: 1px solid var(--hms-border);">
         <div class="d-flex align-items-center">
-            <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-4 shadow-sm" style="width: 70px; height: 70px;">
-                <span class="fs-2">👨‍⚕️</span>
+            <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary me-3">
+                <i class="bi bi-person-badge"></i>
             </div>
             <div>
-                <h2 class="fw-bolder mb-1 text-dark">Dr. {{ doctor.user.name }}</h2>
-                <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fs-6">{{ doctor.department.name }} Department</span>
+                <h2 class="page-title mb-1">Dr. {{ doctor.user.name }}</h2>
+                <p class="body-text mb-0">{{ doctor.department.name }}</p>
             </div>
         </div>
         <div>
-            <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+            <a href="{{ url_for('patient.patient_search') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                <i class="bi bi-arrow-left me-1"></i> Back to Search
+            </a>
         </div>
     </div>
-    
-    <h4 class="fw-bold mb-4 d-flex align-items-center"><span class="fs-3 me-2">🗓️</span> Upcoming Availability</h4>
 
     <div class="row g-4">
-        {% for d in dates %}
-        <div class="col-md-6 col-lg-4">
-            <div class="dashboard-card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="transition: transform 0.2s;">
-                <!-- Header -->
-                <div class="bg-light p-3 text-center border-bottom">
-                    <span class="fw-bold text-dark fs-5">{{ d.strftime('%a, %d %b') }}</span>
-                    <br>
-                    <small class="text-muted text-uppercase fw-semibold">{{ d.strftime('%Y') }}</small>
-                </div>
-                
-                <!-- Slots -->
-                <div class="p-3 d-flex flex-column gap-3">
-                    {% for shift in ['morning', 'evening'] %}
-                        {% set s = slot_map.get((d, shift)) %}
-                        
-                        <div class="border rounded-3 p-3 position-relative {% if s and s.status == 'OPEN' %}bg-white border-primary{% else %}bg-light{% endif %}" style="transition: all 0.2s;">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="fw-bold text-dark small text-uppercase">
-                                    {% if shift == 'morning' %} Morning <span class="text-muted">(8am - 12pm)</span>
-                                    {% else %} Evening <span class="text-muted">(4pm - 9pm)</span>
-                                    {% endif %}
-                                </span>
+        {% for day in dates %}
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="hms-card h-100 p-0 overflow-hidden d-flex flex-column">
+                    <div style="background-color: var(--hms-bg); padding: 16px; border-bottom: 1px solid var(--hms-border); text-align: center;">
+                        <div style="font-weight: 700; color: var(--hms-dark);">{{ day.strftime('%A') }}</div>
+                        <div class="label-caption mt-1">{{ day.strftime('%b %d, %Y') }}</div>
+                    </div>
+                    
+                    <div class="p-3 flex-grow-1">
+                        <!-- Morning Slot -->
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="bi bi-brightness-high text-warning me-2"></i>
+                                <span class="label-caption mb-0">Morning</span>
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-center pt-2 border-top border-light">
-                            {% if s %}
-                                {% if s.status == 'OPEN' %}
-                                    <form method="POST" class="w-100">
-                                        <input type="hidden" name="slot_id" value="{{ s.id }}">
-                                        <button type="submit" class="btn modern-btn-primary rounded-pill w-100 shadow-sm py-2 fw-semibold">Book Now</button>
+                            {% set morning_key = (day, 'morning') %}
+                            {% if morning_key in slot_map %}
+                                {% set slot_info = slot_map[morning_key] %}
+                                {% if slot_info.status == 'OPEN' %}
+                                    <form method="POST" action="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}">
+                                        <input type="hidden" name="slot_id" value="{{ slot_info.id }}">
+                                        <button type="submit" class="btn hms-btn-primary w-100 py-2" style="font-size: 0.875rem;">Book Now</button>
                                     </form>
-                                {% elif s.status == 'BOOKED' %}
-                                    <span class="badge badge-soft-warning py-2 w-100 rounded-pill"><i class="bi bi-clock"></i> Already Booked</span>
-                                {% elif s.status == 'COMPLETED' %}
-                                    <span class="badge badge-soft-success py-2 w-100 rounded-pill"><i class="bi bi-check-circle"></i> Completed</span>
-                                {% elif s.status == 'CANCELLED' %}
-                                    <span class="badge badge-soft-danger py-2 w-100 rounded-pill"><i class="bi bi-x-circle"></i> Cancelled</span>
+                                {% elif slot_info.status == 'BOOKED' %}
+                                    <span class="hms-badge hms-badge-info w-100 text-center py-2 d-block" style="font-size: 0.875rem;">Your Booking</span>
+                                {% elif slot_info.status == 'COMPLETED' %}
+                                    <span class="hms-badge hms-badge-success w-100 text-center py-2 d-block" style="font-size: 0.875rem;">Completed</span>
+                                {% elif slot_info.status == 'CANCELLED' %}
+                                    <span class="hms-badge hms-badge-danger w-100 text-center py-2 d-block" style="font-size: 0.875rem;">Cancelled</span>
                                 {% else %}
-                                    <span class="text-muted small fw-medium py-2"><i class="bi bi-calendar-x"></i> Not Available</span>
+                                    <div class="text-center py-2" style="background-color: var(--hms-bg); border-radius: 8px; color: var(--hms-muted); font-size: 0.875rem;">
+                                        Unavailable
+                                    </div>
                                 {% endif %}
                             {% else %}
-                                <span class="text-muted small fw-medium py-2"><i class="bi bi-calendar-x"></i> Not Available</span>
+                                <div class="text-center py-2" style="background-color: var(--hms-bg); border-radius: 8px; color: var(--hms-muted); font-size: 0.875rem;">
+                                    Not Available
+                                </div>
                             {% endif %}
-                            </div>
                         </div>
-                    {% endfor %}
+
+                        <!-- Evening Slot -->
+                        <div>
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="bi bi-moon-stars text-info me-2"></i>
+                                <span class="label-caption mb-0">Evening</span>
+                            </div>
+
+                            {% set evening_key = (day, 'evening') %}
+                            {% if evening_key in slot_map %}
+                                {% set slot_info = slot_map[evening_key] %}
+                                {% if slot_info.status == 'OPEN' %}
+                                    <form method="POST" action="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}">
+                                        <input type="hidden" name="slot_id" value="{{ slot_info.id }}">
+                                        <button type="submit" class="btn hms-btn-primary w-100 py-2" style="font-size: 0.875rem;">Book Now</button>
+                                    </form>
+                                {% elif slot_info.status == 'BOOKED' %}
+                                    <span class="hms-badge hms-badge-info w-100 text-center py-2 d-block" style="font-size: 0.875rem;">Your Booking</span>
+                                {% elif slot_info.status == 'COMPLETED' %}
+                                    <span class="hms-badge hms-badge-success w-100 text-center py-2 d-block" style="font-size: 0.875rem;">Completed</span>
+                                {% elif slot_info.status == 'CANCELLED' %}
+                                    <span class="hms-badge hms-badge-danger w-100 text-center py-2 d-block" style="font-size: 0.875rem;">Cancelled</span>
+                                {% else %}
+                                    <div class="text-center py-2" style="background-color: var(--hms-bg); border-radius: 8px; color: var(--hms-muted); font-size: 0.875rem;">
+                                        Unavailable
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="text-center py-2" style="background-color: var(--hms-bg); border-radius: 8px; color: var(--hms-muted); font-size: 0.875rem;">
+                                    Not Available
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
-
 </div>
 {% endblock %}

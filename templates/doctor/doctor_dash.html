@@ -1,30 +1,18 @@
 {% extends 'base.html' %}
 {% block subtitle %}Dashboard{% endblock %}
 
-<!-- Navbar Overrides -->
-{% block navbrand %}
-<a href="{{ url_for('doctor.doctor_dashboard') }}" class="navbar-brand h1 mb-0 fw-bolder text-primary" style="letter-spacing: -0.5px;">+ MedCare Doctor</a>
-{% endblock %}
-
-{% block navlinks %}
-<li class="nav-item me-2">
-  <a class="nav-link fw-semibold" href="{{ url_for('doctor.update_availability', user_id=current_user.id) }}">Manage Availability</a>
-</li>
-{% endblock %}
-
 {% block content %}
 <div class="container py-5">
     
-    <!-- Welcome Header -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 border-bottom pb-4">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 pb-3" style="border-bottom: 1px solid var(--hms-border);">
         <div>
-            <span class="badge bg-primary-soft mb-2 px-3 py-2 rounded-pill">Doctor Portal</span>
-            <h2 class="fw-bolder display-6 mb-1 text-dark">Welcome back, Dr. {{ current_user.name.split(' ')[0] }}!</h2>
-            <p class="text-muted fs-5 mb-0">Overview of your appointments and patient treatments.</p>
+            <h2 class="page-title mb-1">Welcome back, Dr. {{ current_user.name.split(' ')[0] }}</h2>
+            <p class="body-text mb-0">Overview of your appointments and patient treatments.</p>
         </div>
         <div class="mt-4 mt-md-0">
-            <a href="{{ url_for('doctor.update_availability', user_id=current_user.id) }}" class="btn modern-btn-primary rounded-pill px-4 shadow-sm py-2">
-                Provide Availability
+            <a href="{{ url_for('doctor.update_availability', user_id=current_user.id) }}" class="btn hms-btn-primary">
+                Manage Availability
             </a>
         </div>
     </div>
@@ -32,55 +20,60 @@
     <div class="row g-4">
         <!-- Upcoming Appointments Section -->
         <div class="col-lg-8">
-            <h4 class="fw-bold mb-4 d-flex align-items-center"><span class="fs-3 me-2">📅</span> Upcoming Appointments</h4>
+            <h4 class="section-heading d-flex align-items-center mb-4">
+                <i class="bi bi-calendar3 text-primary me-2"></i> Upcoming Appointments
+            </h4>
             
             {% if appointments %}
                 <div class="row g-3">
                 {% for ap in appointments %}
                     <div class="col-md-6">
-                        <div class="dashboard-card h-100 p-4 border-0 shadow-sm rounded-4 position-relative overflow-hidden" style="transition: transform 0.2s;">
-                            <!-- Top bar accent -->
-                            <div class="position-absolute top-0 start-0 w-100 {% if ap.treatment %}bg-success{% else %}bg-primary{% endif %}" style="height: 4px;"></div>
-                            
+                        <div class="hms-card h-100 d-flex flex-column" style="padding: 20px;">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
-                                    <h5 class="fw-bold mb-1">{{ ap.patient.name }}</h5>
-                                    <p class="text-muted small mb-0">Patient #{{ ap.patient.id }}</p>
+                                    <div style="font-weight: 600; color: var(--hms-dark);">{{ ap.patient.name }}</div>
+                                    <div style="font-size: 0.8rem; color: var(--hms-muted);">Patient #{{ ap.patient.id }}</div>
                                 </div>
                                 {% if ap.treatment %}
-                                    <span class="badge badge-soft-success px-2 py-1 rounded-pill">Treated</span>
+                                    <span class="hms-badge hms-badge-success">Treated</span>
                                 {% else %}
-                                    <span class="badge badge-soft-warning px-2 py-1 rounded-pill">Pending</span>
+                                    <span class="hms-badge hms-badge-warning">Pending</span>
                                 {% endif %}
                             </div>
 
-                            <div class="d-flex gap-3 mb-4">
-                                <div class="bg-light rounded p-2 text-center flex-fill">
-                                    <small class="text-muted d-block text-uppercase" style="font-size: 0.7rem;">Date</small>
-                                    <strong class="text-dark">{{ ap.slot.date.strftime('%d %b, %Y') }}</strong>
+                            <div class="d-flex gap-3 mb-4" style="background-color: var(--hms-bg); border-radius: 8px; padding: 12px;">
+                                <div class="flex-fill">
+                                    <div class="label-caption" style="margin-bottom: 2px;">Date</div>
+                                    <div style="font-weight: 500; font-size: 0.875rem;">{{ ap.slot.date.strftime('%b %d, %Y') }}</div>
                                 </div>
-                                <div class="bg-light rounded p-2 text-center flex-fill">
-                                    <small class="text-muted d-block text-uppercase" style="font-size: 0.7rem;">Time</small>
-                                    <strong class="text-dark">{% if ap.slot.time == 'morning' %}8AM-12PM{% else %}4PM-9PM{% endif %}</strong>
+                                <div class="flex-fill">
+                                    <div class="label-caption" style="margin-bottom: 2px;">Time</div>
+                                    <div style="font-weight: 500; font-size: 0.875rem;">{% if ap.slot.time == 'morning' %}Morning{% else %}Evening{% endif %}</div>
                                 </div>
                             </div>
                             
-                            <!-- Action Buttons -->
                             <div class="mt-auto d-flex flex-column gap-2">
                                 <a href="{{ url_for('doctor.add_treatment_details', id=ap.id)}}" 
-                                   class="btn rounded-pill fw-semibold {% if ap.treatment %}btn-outline-secondary disabled{% else %}modern-btn-primary shadow-sm{% endif %} w-100">
+                                   class="btn w-100 {% if ap.treatment %}hms-btn-outline disabled{% else %}hms-btn-primary{% endif %}"
+                                   style="font-size: 0.875rem; padding: 8px 16px;">
                                    {% if ap.treatment %}Treatment Logged{% else %}Add Treatment{% endif %}
                                 </a>
                                 
                                 <div class="d-flex gap-2">
                                     <form method="POST" action="{{ url_for('doctor.mark_appointment', id=ap.id) }}" class="flex-fill">
-                                        <button class="btn btn-sm rounded-pill w-100 fw-semibold {% if ap.treatment %}btn-success shadow-sm{% else %}btn-light text-muted{% endif %}" type="submit" {% if not ap.treatment %}disabled{% endif %}>
+                                        <button class="btn w-100 {% if ap.treatment %}hms-btn-success{% else %}hms-btn-outline disabled{% endif %}" 
+                                                type="submit" 
+                                                {% if not ap.treatment %}disabled{% endif %}
+                                                style="font-size: 0.875rem; padding: 8px 16px; {% if not ap.treatment %}background-color: var(--hms-bg); color: var(--hms-muted); border-color: var(--hms-border);{% endif %}">
                                             Mark Complete
                                         </button>
                                     </form>
 
                                     <form method="POST" action="{{ url_for('patient.cancel_appointment', id=ap.id) }}" class="flex-fill">
-                                        <button class="btn btn-sm btn-outline-danger rounded-pill w-100 fw-semibold" type="submit" {% if ap.treatment %}disabled{% endif %}>
+                                        <button class="btn hms-btn-outline w-100" 
+                                                type="submit" 
+                                                {% if ap.treatment %}disabled{% endif %}
+                                                style="color: var(--hms-danger); border-color: var(--hms-danger); font-size: 0.875rem; padding: 8px 16px;">
                                             Cancel
                                         </button>
                                     </form>
@@ -91,36 +84,39 @@
                 {% endfor %}
                 </div>
             {% else %}
-                <div class="dashboard-card p-5 text-center border-0 shadow-sm rounded-4 bg-white">
-                    <span class="display-1 text-muted opacity-25 mb-3 d-block">☕</span>
-                    <h5 class="fw-bold text-dark">Clear Schedule</h5>
-                    <p class="text-muted mb-0">You have no upcoming appointments.</p>
+                <div class="hms-card text-center py-5">
+                    <i class="bi bi-calendar3" style="font-size: 2.5rem; color: var(--hms-muted); opacity: 0.5;"></i>
+                    <h5 style="font-weight: 600; margin-top: 16px; margin-bottom: 8px;">Clear Schedule</h5>
+                    <p class="body-text mb-0">You have no upcoming appointments.</p>
                 </div>
             {% endif %}
         </div>
 
         <!-- Treated Patients Sidebar -->
         <div class="col-lg-4">
-            <h4 class="fw-bold mb-4 d-flex align-items-center"><span class="fs-3 me-2">📋</span> Recent Patients</h4>
+            <h4 class="section-heading d-flex align-items-center mb-4">
+                <i class="bi bi-clock-history text-primary me-2"></i> Recent Patients
+            </h4>
             
-            <div class="dashboard-card p-0 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                <div class="list-group list-group-flush rounded-4">
+            <div class="hms-card hms-card-nopad">
+                <div class="list-group list-group-flush" style="border-radius: 12px;">
                 {% if treatments %}
                     {% for tr in treatments %}
-                        <div class="list-group-item list-group-item-action p-4 border-bottom-0 border-light" style="transition: background-color 0.2s;">
+                        <div class="list-group-item px-4 py-3" style="border-bottom: 1px solid var(--hms-border); {% if loop.last %}border-bottom: none;{% endif %}">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="fw-bold mb-0 text-dark">{{ tr.appointment.patient.name }}</h6>
-                                <span class="badge bg-light text-muted border">{{ tr.created_at.strftime('%d %b') }}</span>
+                                <div style="font-weight: 600; color: var(--hms-dark);">{{ tr.appointment.patient.name }}</div>
+                                <span class="hms-badge" style="background-color: var(--hms-bg); color: var(--hms-text); font-weight: 500; font-size: 0.7rem; border: 1px solid var(--hms-border);">{{ tr.created_at.strftime('%b %d') }}</span>
                             </div>
-                            <div class="mt-3">
-                                <a href="{{ url_for('doctor.patient_history', id=tr.appointment.patient_id)}}" class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-semibold">View Full History</a>
+                            <div class="mt-2">
+                                <a href="{{ url_for('doctor.patient_history', id=tr.appointment.patient_id)}}" style="font-size: 0.8rem; color: var(--hms-primary); text-decoration: none; font-weight: 500;">
+                                    View Full History <i class="bi bi-chevron-right" style="font-size: 0.75rem;"></i>
+                                </a>
                             </div>
                         </div>
-                        {% if not loop.last %}<hr class="my-0 text-muted opacity-10">{% endif %}
                     {% endfor %}
                 {% else %}
-                    <div class="p-5 text-center text-muted">
-                        <p class="mb-0">No past treatments logged yet.</p>
+                    <div class="p-4 text-center text-muted body-text">
+                        No past treatments logged yet.
                     </div>
                 {% endif %}
                 </div>

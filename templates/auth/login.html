@@ -1,55 +1,43 @@
 {% extends 'base.html' %}
-{% block title %}Sign In to MedCare{% endblock %}
+{% block subtitle %}Sign In{% endblock %}
 
 {% block content %}
-<div class="auth-wrapper" style="background-color: #f8fafd;">
-    <div class="auth-card animate-fade-up">
-        <!-- Sidebar Graphic -->
-        <div class="auth-sidebar d-none d-md-flex position-relative overflow-hidden">
-            <div class="position-relative" style="z-index: 2;">
-                <div class="badge rounded-pill bg-white text-primary mb-4 px-3 py-2 fw-bold shadow-sm">
-                    MedCare
-                </div>
-                <h2 class="fw-bolder display-6 mb-3">Welcome Back.</h2>
-                <p class="fs-5 opacity-75">Connect to your portal to manage your health or hospital operations securely.</p>
-            </div>
-            <!-- Decorative circle -->
-            <div class="position-absolute" style="width: 300px; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%; bottom: -50px; right: -50px;"></div>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh; padding: 40px 0;">
+    <div class="hms-card" style="width: 100%; max-width: 420px;">
+        
+        <div class="text-center mb-4">
+            <h1 style="font-size: 2rem; font-weight: 800; color: var(--hms-primary); letter-spacing: -1px; margin-bottom: 8px;">HMS</h1>
+            <p class="body-text mb-0">Sign in to your account</p>
         </div>
 
-        <!-- Form Area -->
-        <div class="auth-form-area d-flex flex-column justify-content-center">
-            <div class="mb-5 text-center">
-                <h3 class="fw-bolder mb-2 text-dark">Sign In</h3>
-                <p class="text-muted">Enter your details to proceed.</p>
+        <form method="POST">
+            <div class="mb-3">
+                <label class="hms-label" for="email">Email Address</label>
+                <input type="email" class="hms-input" id="email" name="email" placeholder="name@hospital.com" required>
             </div>
             
-            <form method="POST">
-                <div class="mb-4">
-                    <label for="email" class="form-label fw-semibold text-muted small text-uppercase">Email Address</label>
-                    <input type="email" class="modern-input w-100" name="email" id="email" placeholder="you@example.com" required>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="pass" class="form-label fw-semibold text-muted small text-uppercase">Password</label>
-                    <input type="password" class="modern-input w-100" name="pass" id="pass" placeholder="••••••••" required>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="role-select" class="form-label fw-semibold text-muted small text-uppercase">Account Type</label>
-                    <select id="role-select" class="modern-input w-100" name="role" required>
-                        <option value="patient" selected>Patient</option>
-                        <option value="doctor">Doctor</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                
-                <div class="mt-5 text-center">
-                    <button type="submit" class="btn modern-btn-primary w-100 py-3 rounded-pill fs-5 shadow-sm mb-3">Sign In</button>
-                    <p class="text-muted">Are you a new user? <a href="{{url_for('auth.register')}}" class="text-primary fw-bold text-decoration-none">Register here</a></p>
-                </div>
-            </form> 
+            <div class="mb-3">
+                <label class="hms-label" for="password">Password</label>
+                <input type="password" class="hms-input" id="password" name="pass" placeholder="••••••••" required>
+            </div>
+            
+            <div class="mb-4">
+                <label class="hms-label" for="role">Account Type</label>
+                <select class="hms-input" id="role" name="role" required style="cursor: pointer;">
+                    <option value="patient" selected>Patient Access</option>
+                    <option value="doctor">Medical Staff</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn hms-btn-primary w-100 py-2" style="font-size: 1rem;">Sign In</button>
+        </form>
+
+        <div class="text-center mt-4 pt-4" style="border-top: 1px solid var(--hms-border);">
+            <span class="body-text" style="font-size: 0.875rem;">New here? </span>
+            <a href="{{ url_for('auth.register') }}" style="color: var(--hms-primary); font-weight: 500; font-size: 0.875rem; text-decoration: none;">Create an account</a>
         </div>
+        
     </div>
 </div>
 {% endblock %}

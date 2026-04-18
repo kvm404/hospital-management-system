@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 {% block subtitle %}Availability{% endblock %}
 
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Schedule Management</span>
-{% endblock %}
-
 {% block content %}
 <div class="container py-5">
     
-    <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-4">
+    <div class="d-flex justify-content-between align-items-center mb-5 pb-3" style="border-bottom: 1px solid var(--hms-border);">
         <div class="d-flex align-items-center">
-            <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-4 shadow-sm" style="width: 70px; height: 70px;">
-                <span class="fs-2">🗓️</span>
+            <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary me-3">
+                <i class="bi bi-calendar-range"></i>
             </div>
             <div>
-                <h2 class="fw-bolder mb-1 text-dark">Dr. {{ doctor.user.name }}</h2>
-                <p class="text-muted fs-5 mb-0">Manage your working shifts and open slots.</p>
+                <h2 class="page-title mb-1">Dr. {{ doctor.user.name }}</h2>
+                <p class="body-text mb-0">Manage your working shifts and open slots.</p>
             </div>
         </div>
         <div>
             {% if current_user.role == 'admin' %}
-                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Admin Dashboard</a>
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Admin Dashboard
+                </a>
             {% else %}
-                <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+                <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Dashboard
+                </a>
             {% endif %}
         </div>
     </div>
@@ -30,72 +30,74 @@
     <div class="row g-5">
         <!-- Add Slot Form -->
         <div class="col-lg-4">
-            <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white sticky-top" style="top: 2rem;">
-                <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
-                <div class="p-4">
-                    <h4 class="fw-bold mb-4 d-flex align-items-center"><i class="bi bi-plus-circle text-primary me-2"></i> Add Availability</h4>
+            <div class="hms-card sticky-top" style="top: 2rem;">
+                <h4 class="section-heading mb-4"><i class="bi bi-plus-lg text-primary me-2"></i> Add Availability</h4>
+                
+                <form method="POST">
+                    <div class="mb-4">
+                        <label class="hms-label">Select Date</label>
+                        <input type="date" class="hms-input" name="date" required>
+                    </div>
                     
-                    <form method="POST">
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-muted small text-uppercase">Select Date</label>
-                            <input type="date" class="modern-input w-100" name="date" required>
-                        </div>
-                        
-                        <div class="mb-5">
-                            <label class="form-label fw-semibold text-muted small text-uppercase">Select Shift</label>
-                            <select class="modern-input w-100" name="time" required>
-                                <option value="morning">Morning (8am - 12pm)</option>
-                                <option value="evening">Evening (4pm - 9pm)</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn modern-btn-primary w-100 py-3 rounded-pill fw-semibold shadow-sm fs-5">Add Slot</button>
-                    </form>
-                </div>
+                    <div class="mb-4 pb-2">
+                        <label class="hms-label">Select Shift</label>
+                        <select class="hms-input" name="time" required style="cursor: pointer;">
+                            <option value="morning">Morning (8am - 12pm)</option>
+                            <option value="evening">Evening (4pm - 9pm)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn hms-btn-primary w-100">Add Slot</button>
+                </form>
             </div>
         </div>
 
         <!-- Open Slots List -->
         <div class="col-lg-8">
-            <h4 class="fw-bold mb-4 d-flex align-items-center"><span class="fs-4 me-2">📋</span> Current Schedule</h4>
+            <h4 class="section-heading mb-4"><i class="bi bi-card-list text-primary me-2"></i> Current Schedule</h4>
             
-            <div class="dashboard-card p-0 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+            <div class="hms-card hms-card-nopad overflow-hidden">
+                <table class="hms-table">
+                    <thead>
                         <tr>
-                            <th class="py-3 ps-4 text-muted small text-uppercase">Date</th>
-                            <th class="py-3 text-muted small text-uppercase">Shift</th>
-                            <th class="py-3 text-muted small text-uppercase text-center">Status</th>
-                            <th class="py-3 pe-4 text-end text-muted small text-uppercase">Action</th>
+                            <th>Date</th>
+                            <th>Shift</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-end pe-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% if slots %}
                             {% for slot in slots %}
                             <tr>
-                                <td class="ps-4 fw-bold text-dark">{{ slot.date.strftime('%d %b, %Y') }}</td>
+                                <td style="font-weight: 600; color: var(--hms-dark);">{{ slot.date.strftime('%b %d, %Y') }}</td>
                                 <td>
                                     {% if slot.time == 'morning' %}
-                                        <span class="text-primary fw-semibold"><i class="bi bi-brightness-alt-high"></i> Morning</span>
+                                        <div class="d-flex align-items-center" style="color: var(--hms-primary); font-weight: 500;">
+                                            <i class="bi bi-brightness-high me-2"></i> Morning
+                                        </div>
                                     {% else %}
-                                        <span class="text-info fw-semibold"><i class="bi bi-moon-stars"></i> Evening</span>
+                                        <div class="d-flex align-items-center" style="color: #0284C7; font-weight: 500;">
+                                            <i class="bi bi-moon-stars me-2"></i> Evening
+                                        </div>
                                     {% endif %}
                                 </td>
                                 <td class="text-center">
                                     {% if slot.appointments %}
                                         {% if slot.appointments[-1].status != 'cancelled' %}
-                                            <span class="badge badge-soft-warning px-3 py-2 rounded-pill">Booked</span>
+                                            <span class="hms-badge hms-badge-warning">Booked</span>
                                         {% else %}
-                                            <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open</span>
+                                            <span class="hms-badge hms-badge-success">Open</span>
                                         {% endif %}
                                     {% else %}
-                                        <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open</span>
+                                        <span class="hms-badge hms-badge-success">Open</span>
                                     {% endif %}
                                 </td>
-                                <td class="pe-4 text-end">
+                                <td class="text-end pe-4">
                                     <form action="{{ url_for('doctor.delete_slot', id=slot.id) }}" method="POST" class="d-inline-block">
-                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill fw-semibold px-3" 
-                                        {% if slot.appointments and slot.appointments[-1].status != 'cancelled' %} disabled title="Cannot delete booked slots" {% endif %}>
+                                        <button type="submit" class="btn hms-btn-outline" 
+                                            style="color: var(--hms-danger); border-color: var(--hms-danger); padding: 4px 12px; font-size: 0.75rem;"
+                                            {% if slot.appointments and slot.appointments[-1].status != 'cancelled' %} disabled title="Cannot delete booked slots" style="opacity: 0.5;" {% endif %}>
                                             Remove
                                         </button>
                                     </form>
@@ -105,9 +107,9 @@
                         {% else %}
                             <tr>
                                 <td colspan="4" class="p-5 text-center">
-                                    <span class="display-4 text-muted opacity-25 mb-3 d-block">📭</span>
-                                    <h5 class="fw-bold text-dark">No Slots Configured</h5>
-                                    <p class="text-muted mb-0">Use the form to add your working availability.</p>
+                                    <i class="bi bi-calendar-x" style="font-size: 2.5rem; color: var(--hms-muted); opacity: 0.5;"></i>
+                                    <h5 style="font-weight: 600; margin-top: 16px; margin-bottom: 8px;">No Slots Configured</h5>
+                                    <p class="body-text mb-0">Use the form to add your working availability.</p>
                                 </td>
                             </tr>
                         {% endif %}

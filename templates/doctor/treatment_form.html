@@ -1,71 +1,56 @@
 {% extends 'base.html' %}
 {% block subtitle %}Treatment Details{% endblock %}
 
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Treatment Log</span>
-{% endblock %}
-
 {% block content %}
-<div class="container py-5" style="max-width: 900px;">
-    
-    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-        <div>
-            <h2 class="fw-bolder mb-0 text-dark">Log Treatment</h2>
-            <p class="text-muted fs-5">Recording details for patient {{ appointment.patient.name }}.</p>
-        </div>
-        <div>
-            <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
-        </div>
-    </div>
-
-    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mt-4">
-        <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 5px;"></div>
+<div class="container py-5 d-flex justify-content-center">
+    <div class="hms-card" style="width: 100%; max-width: 800px;">
         
-        <div class="card-body p-4 p-md-5">
-            <div class="d-flex align-items-center mb-4 pb-4 border-bottom">
-                <div class="bg-primary-soft rounded-circle d-flex justify-content-center align-items-center me-4" style="width: 70px; height: 70px;">
-                    <span class="fs-2">📝</span>
+        <div class="d-flex justify-content-between align-items-center mb-5 pb-4" style="border-bottom: 1px solid var(--hms-border);">
+            <div>
+                <h2 class="page-title mb-1">Log Treatment</h2>
+                <p class="body-text mb-0">Patient: <span style="font-weight: 600; color: var(--hms-dark);">{{ appointment.patient.name }}</span></p>
+            </div>
+            <div>
+                <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Dashboard
+                </a>
+            </div>
+        </div>
+
+        <form method="POST">
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="hms-label" for="visit">Visit Type</label>
+                    <input type="text" class="hms-input" name="visit" id="visit" placeholder="e.g. In-Person, Follow-up" required>
                 </div>
-                <div>
-                    <h5 class="fw-bold mb-1">Patient: {{ appointment.patient.name }}</h5>
-                    <p class="text-muted mb-0">Department: {{ appointment.doctor.department.name }}</p>
+
+                <div class="col-md-6">
+                    <label class="hms-label" for="test">Tests Done</label>
+                    <input type="text" class="hms-input" name="test" id="test" placeholder="e.g. Blood Test, X-Ray" required>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <label class="hms-label" for="diagnosis">Diagnosis</label>
+                    <textarea class="hms-input" name="diagnosis" id="diagnosis" rows="3" placeholder="Enter clinical diagnosis" required></textarea>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <label class="hms-label" for="medicines">Medicines</label>
+                    <textarea class="hms-input" name="medicines" id="medicines" rows="2" placeholder="List prescribed medications" required></textarea>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <label class="hms-label" for="prescription">Prescription & Notes</label>
+                    <textarea class="hms-input" name="prescription" id="prescription" rows="4" placeholder="Detailed notes for the patient" required></textarea>
                 </div>
             </div>
 
-            <form method="POST">
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <label for="visit" class="form-label fw-semibold text-muted small text-uppercase">Visit Type</label>
-                        <input type="text" class="modern-input w-100" name="visit" id="visit" placeholder="e.g. In-Person, Follow-up" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="test" class="form-label fw-semibold text-muted small text-uppercase">Tests Done</label>
-                        <input type="text" class="modern-input w-100" name="test" id="test" placeholder="e.g. Blood Test, X-Ray" required>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="diagnosis" class="form-label fw-semibold text-muted small text-uppercase">Diagnosis</label>
-                        <textarea class="modern-input w-100" name="diagnosis" id="diagnosis" rows="3" placeholder="Enter clinical diagnosis" required></textarea>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="medicines" class="form-label fw-semibold text-muted small text-uppercase">Medicines</label>
-                        <textarea class="modern-input w-100" name="medicines" id="medicines" rows="2" placeholder="List prescribed medications" required></textarea>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="prescription" class="form-label fw-semibold text-muted small text-uppercase">Prescription & Notes</label>
-                        <textarea class="modern-input w-100" name="prescription" id="prescription" rows="4" placeholder="Detailed notes for the patient" required></textarea>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end mt-5 pt-4 border-top gap-3">
-                    <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-light rounded-pill px-4 py-2 fs-5">Cancel</a>
-                    <button type="submit" class="btn modern-btn-primary rounded-pill px-5 py-2 shadow-sm fs-5">Save Record</button>
-                </div>
-            </form>
-        </div>
+            <div class="d-flex justify-content-end pt-4 mt-2" style="border-top: 1px solid var(--hms-border);">
+                <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-outline me-3">Cancel</a>
+                <button type="submit" class="btn hms-btn-primary px-5">Save Record</button>
+            </div>
+        </form>
+        
     </div>
 </div>
 {% endblock %}

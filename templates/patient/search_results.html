@@ -1,58 +1,49 @@
 {% extends 'base.html' %}
 {% block subtitle %}Search Results{% endblock %}
-{% block title %}Search Results{% endblock %}
-
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Search Results</span>
-{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     
     <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
         <div>
-            <h2 class="fw-bolder mb-0 text-dark">Search Results for "{{ q }}"</h2>
-            <p class="text-muted fs-5">Showing matched doctors and specialists.</p>
+            <h2 class="page-title mb-1">Results for "{{ q }}"</h2>
+            <p class="body-text mb-0">Found {{ doctors|length }} matching specialist(s)</p>
         </div>
         <div>
-            <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
+            <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                <i class="bi bi-arrow-left me-1"></i> Dashboard
+            </a>
         </div>
     </div>
 
     {% if doctors %}
         <div class="row g-4">
-            {% for doc in doctors %}
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card h-100 border-0 shadow-sm rounded-4 text-center p-4 position-relative overflow-hidden" style="transition: transform 0.2s;">
-                    <!-- top accent -->
-                    <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
-                    
-                    <div class="bg-primary-soft rounded-circle mx-auto d-flex justify-content-center align-items-center mb-3 mt-2" style="width: 80px; height: 80px;">
-                        <span class="fs-1">👨‍⚕️</span>
-                    </div>
-                    
-                    <h5 class="fw-bold mb-1">{{ doc.user.name }}</h5>
-                    <p class="text-muted mb-3">{{ doc.department.name }} Department</p>
-                    
-                    <div class="d-flex flex-column gap-2 mt-auto">
-                        <a href="{{ url_for('patient.check_availability', doctor_id=doc.user_id) }}" 
-                           class="btn modern-btn-primary rounded-pill w-100 fw-semibold">
-                           Book Appointment
-                        </a>
-                        <a href="{{ url_for('patient.doctor_details', doct_id=doc.user_id) }}" 
-                           class="btn btn-outline-primary rounded-pill w-100">
-                           View Profile
-                        </a>
+            {% for doctor in doctors %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="hms-card h-100 d-flex flex-column text-center">
+                        <div class="mb-3 mt-2">
+                            <div class="hms-icon-circle hms-icon-circle-lg hms-icon-primary mx-auto">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                        </div>
+                        
+                        <h4 style="font-size: 1.125rem; font-weight: 700; color: var(--hms-dark); margin-bottom: 4px;">Dr. {{ doctor.user.name }}</h4>
+                        <p style="font-size: 0.875rem; color: var(--hms-muted); margin-bottom: 20px;">{{ doctor.department.name }}</p>
+                        
+                        <div class="mt-auto d-flex flex-column gap-2">
+                            <a href="{{ url_for('patient.check_availability', doctor_id=doctor.user_id) }}" class="btn hms-btn-primary w-100">Book Consultation</a>
+                            <a href="{{ url_for('patient.doctor_details', doct_id=doctor.user_id) }}" class="btn hms-btn-outline w-100">View Profile</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="dashboard-card p-5 text-center border-0 shadow-sm rounded-4 bg-white mt-4 max-w-lg mx-auto">
-            <span class="display-1 text-muted opacity-25 mb-3 d-block">🔍</span>
-            <h5 class="fw-bold text-dark">No Results Found</h5>
-            <p class="text-muted mb-0">We couldn't find any doctors matching "{{ q }}".</p>
+        <div class="hms-card text-center py-5 mt-4">
+            <i class="bi bi-search" style="font-size: 2.5rem; color: var(--hms-muted); opacity: 0.5;"></i>
+            <h5 style="font-weight: 600; margin-top: 16px; margin-bottom: 8px;">No Results Found</h5>
+            <p class="body-text mb-4">Try searching with a different name or department.</p>
+            <a href="{{ url_for('patient.patient_search') }}" class="btn hms-btn-primary">View All Departments</a>
         </div>
     {% endif %}
 

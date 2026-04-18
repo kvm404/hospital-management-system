@@ -1,115 +1,85 @@
 {% extends 'base.html' %}
-{% block title %}MedCare - Modern Hospital Management{% endblock %}
-
-{% block navbar %}
-<nav class="navbar navbar-expand-md navbar-dark position-absolute w-100 z-3 pt-3" style="background: transparent;">
-  <div class="container">
-    <a class="navbar-brand fw-bolder fs-3 tracking-wide text-white" href="{{ url_for('main.index') }}" style="letter-spacing: -1px;">
-      <span style="color: #4facfe;">+</span> MedCare
-    </a>
-    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#landingNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="landingNav">
-      <ul class="navbar-nav align-items-center">
-         {% if current_user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link fw-semibold text-white px-3" href="{{ url_for(current_user.role + '.' + current_user.role + '_dashboard') }}">Dashboard</a>
-            </li>
-            <li class="nav-item ms-2">
-              <a class="btn btn-outline-light rounded-pill px-4 shadow-sm" href="{{ url_for('auth.logout') }}">Logout</a>
-            </li>
-         {% else %}
-            <li class="nav-item">
-              <a class="nav-link fw-semibold text-white px-3" href="{{ url_for('auth.login') }}">Sign In</a>
-            </li>
-            <li class="nav-item ms-2">
-              <a class="btn rounded-pill px-4 shadow-sm modern-btn-primary" href="{{ url_for('auth.register') }}">Get Started</a>
-            </li>
-         {% endif %}
-      </ul>
-    </div>
-  </div>
-</nav>
-{% endblock %}
+{% block subtitle %}Home{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section text-white d-flex align-items-center">
-    <div class="hero-overlay"></div>
-    <div class="container position-relative" style="z-index: 2; margin-top: 50px;">
-        <div class="row">
-            <div class="col-lg-7 hero-content">
-                <div class="badge rounded-pill bg-white text-primary mb-3 px-3 py-2 fw-semibold shadow-sm animate-fade-up" style="animation-delay: 0.1s;">
-                    ✨ The Future of Medical Administration
-                </div>
-                <h1 class="display-3 fw-bolder mb-4 modern-title animate-fade-up" style="line-height: 1.1; animation-delay: 0.2s;">
-                    Intelligent <br><span class="text-primary-accent">Healthcare</span><br> Management.
-                </h1>
-                <p class="lead mb-5 text-light opacity-75 fs-4 animate-fade-up" style="max-width: 600px; animation-delay: 0.3s;">
-                    Streamline operations, empower medical staff, and elevate patient care seamlessly with our state-of-the-art platform.
-                </p>
-                <div class="d-flex flex-wrap gap-3 animate-fade-up" style="animation-delay: 0.4s;">
-                    {% if not current_user.is_authenticated %}
-                        <a href="{{ url_for('auth.register') }}" class="btn modern-btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg popup-btn fs-5">Create Account</a>
-                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 glow-btn fs-5">Sign In</a>
-                    {% else %}
-                        <a href="{{ url_for(current_user.role + '.' + current_user.role + '_dashboard') }}" class="btn modern-btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg popup-btn fs-5">Access Dashboard</a>
-                    {% endif %}
-                </div>
-            </div>
+<section style="padding: 100px 0 80px; background-color: var(--hms-surface);">
+    <div class="container text-center">
+        <div class="mb-4">
+            <span class="hms-badge" style="background-color: var(--hms-primary-light); color: var(--hms-primary); letter-spacing: 0.1em; font-size: 0.75rem;">HOSPITAL MANAGEMENT SYSTEM</span>
+        </div>
+        <h1 style="font-size: 3.5rem; font-weight: 800; color: var(--hms-dark); line-height: 1.1; margin-bottom: 24px;">
+            Manage your hospital,<br>simplified.
+        </h1>
+        <p class="mx-auto body-text" style="max-width: 540px; font-size: 1.125rem; margin-bottom: 48px;">
+            A unified interface for patients, doctors, and administrators. 
+            Experience secure and seamless operations across all your healthcare facilities.
+        </p>
+        
+        <div class="d-flex justify-content-center gap-3">
+            {% if current_user.is_authenticated %}
+                {% if current_user.role == 'patient' %}
+                    <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-primary px-4 py-2">Go to Dashboard</a>
+                {% elif current_user.role == 'doctor' %}
+                    <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-primary px-4 py-2">Go to Dashboard</a>
+                {% elif current_user.role == 'admin' %}
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-primary px-4 py-2">Go to Dashboard</a>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn hms-btn-primary px-4 py-2" style="font-size: 1rem;">Register Patient</a>
+                <a href="{{ url_for('auth.login') }}" class="btn hms-btn-outline px-4 py-2" style="font-size: 1rem;">Sign In</a>
+            {% endif %}
         </div>
     </div>
 </section>
 
 <!-- Features Section -->
-<section class="py-5" style="background-color: #f8fafd;">
-    <div class="container py-5">
-        <div class="row text-center mb-5">
-            <div class="col-lg-8 mx-auto">
-                <h2 class="fw-bolder modern-title text-dark display-5 mb-3">One Platform.<br>Infinite Possibilities.</h2>
-                <p class="text-muted fs-5">Designed specifically to bridge the gap between patients, doctors, and administration with real-time syncing.</p>
-            </div>
+<section style="padding: 80px 0; background-color: var(--hms-bg);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading mb-0" style="font-size: 1.75rem;">Built for modern healthcare</h2>
         </div>
-        <div class="row g-4 mt-3">
+        
+        <div class="row g-4 justify-content-center">
             <!-- Feature 1 -->
             <div class="col-md-4">
-                <div class="card h-100 feature-card border-0 shadow-sm p-5 text-center rounded-4">
-                    <div class="feature-icon-wrapper mx-auto mb-4 bg-primary-soft shadow-sm d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border-radius: 20px;">
-                        <span class="fs-1">🏥</span>
+                <div class="hms-card h-100" style="transition: border-color 0.2s;">
+                    <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary mb-4">
+                        <i class="bi bi-building"></i>
                     </div>
-                    <h4 class="fw-bolder mb-3">Smart Administration</h4>
-                    <p class="text-muted mb-0">Effortlessly manage departments, oversee doctors, and monitor hospital statistics from a powerful, centralized dashboard.</p>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px; color: var(--hms-dark);">Administration</h3>
+                    <p class="body-text mb-0">
+                        Efficiently manage staff roles, hospital departments, and monitor overall facility metrics in one secure place.
+                    </p>
                 </div>
             </div>
+            
             <!-- Feature 2 -->
             <div class="col-md-4">
-                <div class="card h-100 feature-card border-0 shadow-sm p-5 text-center rounded-4" style="transform: translateY(-15px);">
-                    <div class="feature-icon-wrapper mx-auto mb-4 bg-success-soft shadow-sm d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border-radius: 20px;">
-                        <span class="fs-1">👨‍⚕️</span>
+                <div class="hms-card h-100" style="transition: border-color 0.2s;">
+                    <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary mb-4">
+                        <i class="bi bi-calendar3"></i>
                     </div>
-                    <h4 class="fw-bolder mb-3">Doctor Scheduling</h4>
-                    <p class="text-muted mb-0">Doctors can set availability via an intuitive 7-day calendar, manage upcoming consultations, and document treatments instantly.</p>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px; color: var(--hms-dark);">Scheduling</h3>
+                    <p class="body-text mb-0">
+                        Doctors can rapidly update their availability, viewing assigned shifts and patient workloads securely.
+                    </p>
                 </div>
             </div>
+            
             <!-- Feature 3 -->
             <div class="col-md-4">
-                <div class="card h-100 feature-card border-0 shadow-sm p-5 text-center rounded-4">
-                    <div class="feature-icon-wrapper mx-auto mb-4 bg-info-soft shadow-sm d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border-radius: 20px;">
-                        <span class="fs-1">📅</span>
+                <div class="hms-card h-100" style="transition: border-color 0.2s;">
+                    <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary mb-4">
+                        <i class="bi bi-calendar-check"></i>
                     </div>
-                    <h4 class="fw-bolder mb-3">Instant Booking</h4>
-                    <p class="text-muted mb-0">Patients can search for specialists across departments, view real-time slot availability, and book appointments without friction.</p>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px; color: var(--hms-dark);">Patient Booking</h3>
+                    <p class="body-text mb-0">
+                        Patients can easily browse departments, find verified specialists, and book appointments without the hassle.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Footer -->
-<footer class="bg-white border-top py-4">
-    <div class="container text-center">
-        <p class="mb-0 text-muted fw-medium">&copy; 2026 <strong style="color: #4facfe;">MedCare</strong> Hospital Management System. All rights reserved.</p>
-    </div>
-</footer>
 {% endblock %}

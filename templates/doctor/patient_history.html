@@ -1,59 +1,57 @@
 {% extends 'base.html' %}
 {% block subtitle %}Patient history{% endblock %}
 
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Patient Record</span>
-{% endblock %}
-
 {% block content %}
-<div class="container py-5">
+<div class="container py-5" style="max-width: 900px;">
     
-    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+    <div class="d-flex justify-content-between align-items-center mb-5 pb-3" style="border-bottom: 1px solid var(--hms-border);">
         <div>
-            <h2 class="fw-bolder mb-0 text-dark">{{patient.name}}'s History</h2>
-            <p class="text-muted fs-5">Logged by Dr. {{ current_user.name }} ({{ current_user.doctor_profile.department.name }})</p>
+            <h2 class="page-title mb-1">{{patient.name}}'s History</h2>
+            <p class="body-text mb-0">Logged by Dr. {{ current_user.name }}</p>
         </div>
         <div>
-            <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Back to Dashboard</a>
+            <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </a>
         </div>
     </div>
 
     {% if treatments %}
-        <div class="position-relative ps-4" style="border-left: 3px solid #e9ecef;">
+        <div class="hms-timeline-container">
             {% for tr in treatments %}
-                <div class="dashboard-card border-0 shadow-sm rounded-4 mb-4 position-relative z-1" style="margin-left: 1.5rem;">
+                <div class="hms-card mb-4 ms-2 position-relative">
                     <!-- Timeline dot -->
-                    <div class="position-absolute bg-primary rounded-circle shadow-sm" style="width: 16px; height: 16px; left: -2.05rem; top: 1.5rem; border: 3px solid white;"></div>
+                    <div class="hms-timeline-dot"></div>
                     
                     <div class="row g-0">
-                        <div class="col-md-3 border-end pe-4 d-flex flex-column justify-content-center">
-                            <h5 class="fw-bold text-primary mb-1">{{ tr.created_at.strftime('%B %d, %Y') }}</h5>
-                            <span class="text-muted fw-semibold small text-uppercase">Recorded on</span>
+                        <div class="col-md-3 pe-md-4 mb-4 mb-md-0" style="border-right: 1px solid var(--hms-border);">
+                            <div style="font-weight: 700; color: var(--hms-dark); margin-bottom: 4px;">{{ tr.created_at.strftime('%B %d, %Y') }}</div>
+                            <div class="label-caption mb-3">Recorded on</div>
                         </div>
                         
-                        <div class="col-md-9 ps-md-4 pt-3 pt-md-0">
+                        <div class="col-md-9 ps-md-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4 class="fw-bolder mb-0">{{ tr.diagnosis }}</h4>
-                                <span class="badge bg-info-soft px-3 py-2 rounded-pill fs-6">{{ tr.visit_type }}</span>
+                                <h4 class="section-heading mb-0">{{ tr.diagnosis }}</h4>
+                                <span class="hms-badge hms-badge-info">{{ tr.visit_type }}</span>
                             </div>
                             
                             <div class="row g-3">
                                 <div class="col-sm-6">
-                                    <div class="p-3 bg-light rounded-3 h-100">
-                                        <div class="fw-bold text-muted small text-uppercase mb-2">Tests Performed</div>
-                                        <p class="mb-0 fw-medium">{{ tr.tests_done or 'No specific tests recorded' }}</p>
+                                    <div style="background-color: var(--hms-bg); border-radius: 8px; padding: 16px; height: 100%;">
+                                        <div class="label-caption mb-2">Tests Performed</div>
+                                        <p class="body-text mb-0" style="font-weight: 500;">{{ tr.tests_done or 'No specific tests recorded' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="p-3 bg-light rounded-3 h-100">
-                                        <div class="fw-bold text-muted small text-uppercase mb-2">Prescribed Medicines</div>
-                                        <p class="mb-0 fw-medium">{{ tr.medicines or 'None' }}</p>
+                                    <div style="background-color: var(--hms-bg); border-radius: 8px; padding: 16px; height: 100%;">
+                                        <div class="label-caption mb-2">Prescribed Medicines</div>
+                                        <p class="body-text mb-0" style="font-weight: 500;">{{ tr.medicines or 'None' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="p-3 bg-light rounded-3">
-                                        <div class="fw-bold text-muted small text-uppercase mb-2">Detailed Prescription</div>
-                                        <p class="mb-0 lh-lg">{{ tr.prescription or 'No additional notes provided.' }}</p>
+                                    <div style="background-color: var(--hms-bg); border-radius: 8px; padding: 16px;">
+                                        <div class="label-caption mb-2">Detailed Prescription</div>
+                                        <p class="body-text mb-0" style="line-height: 1.6;">{{ tr.prescription or 'No additional notes provided.' }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -63,10 +61,10 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="dashboard-card p-5 text-center border-0 shadow-sm rounded-4 bg-white mt-4">
-            <span class="display-1 text-muted opacity-25 mb-3 d-block">📜</span>
-            <h5 class="fw-bold text-dark">No Medical History</h5>
-            <p class="text-muted mb-0">You have not recorded any treatments for this patient yet.</p>
+        <div class="hms-card text-center py-5 mt-4">
+            <i class="bi bi-journal-medical" style="font-size: 2.5rem; color: var(--hms-muted); opacity: 0.5;"></i>
+            <h5 style="font-weight: 600; margin-top: 16px; margin-bottom: 8px;">No Medical History</h5>
+            <p class="body-text mb-0">You have not recorded any treatments for this patient yet.</p>
         </div>
     {% endif %}
 

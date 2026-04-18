@@ -1,56 +1,34 @@
 {% extends 'base.html' %}
 {% block subtitle %}Add Department{% endblock %}
 
-{% block navbrand %}
-<span class="fs-4 fw-bolder text-dark">Facility Management</span>
-{% endblock %}
-
 {% block content %}
-<div class="container py-5" style="max-width: 700px;">
-    
-    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-        <div>
-            <h2 class="fw-bolder mb-0 text-dark">Add Department</h2>
-            <p class="text-muted fs-5">Register a new medical division.</p>
-        </div>
-        <div>
-            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">&larr; Dashboard</a>
-        </div>
-    </div>
-
-    <div class="dashboard-card border-0 shadow-sm rounded-4 position-relative overflow-hidden bg-white mt-4">
-        <div class="position-absolute top-0 start-0 w-100 bg-dark" style="height: 5px;"></div>
+<div class="container py-5 d-flex justify-content-center">
+    <div class="hms-card" style="width: 100%; max-width: 600px;">
         
-        <div class="card-body p-4 p-md-5">
-            <div class="d-flex align-items-center mb-4 pb-4 border-bottom">
-                <div class="bg-light rounded-circle d-flex justify-content-center align-items-center me-4 shadow-sm" style="width: 70px; height: 70px;">
-                    <span class="fs-2">🏥</span>
+        <div class="mb-4 pb-4" style="border-bottom: 1px solid var(--hms-border);">
+            <h2 class="page-title mb-1">Add Department</h2>
+            <p class="body-text mb-0">Register a new medical division.</p>
+        </div>
+
+        <form method="POST">
+            <div class="row g-4 mb-5">
+                <div class="col-12">
+                    <label class="hms-label">Department Name</label>
+                    <input type="text" class="hms-input" name="name" placeholder="e.g. Cardiology" required>
                 </div>
-                <div>
-                    <h5 class="fw-bold mb-1 text-dark">Department Configuration</h5>
-                    <p class="text-muted mb-0 small">Enter details for the new department.</p>
+
+                <div class="col-12">
+                    <label class="hms-label">Description</label>
+                    <textarea class="hms-input" name="description" rows="4" placeholder="Overview of the department's focus..." required></textarea>
                 </div>
             </div>
 
-            <form method="POST">
-                <div class="row g-4">
-                    <div class="col-12">
-                        <label class="form-label fw-semibold text-muted small text-uppercase">Department Name</label>
-                        <input type="text" class="modern-input w-100" name="name" placeholder="e.g. Cardiology" required>
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label fw-semibold text-muted small text-uppercase">Description</label>
-                        <textarea class="modern-input w-100" name="description" rows="4" placeholder="Overview of the department's focus..." required></textarea>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end mt-5 pt-4 border-top gap-3">
-                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-light rounded-pill px-4 py-2 fs-6 fw-semibold">Cancel</a>
-                    <button type="submit" class="btn btn-dark rounded-pill px-5 py-2 shadow-sm fs-6 fw-semibold">Register Department</button>
-                </div>
-            </form>
-        </div>
+            <div class="d-flex justify-content-end pt-4" style="border-top: 1px solid var(--hms-border);">
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline me-3">Cancel</a>
+                <button type="submit" class="btn hms-btn-primary">Register Department</button>
+            </div>
+        </form>
+        
     </div>
 </div>
 {% endblock %}

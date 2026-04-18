@@ -1,57 +1,50 @@
 {% extends 'base.html' %}
-{% block title %}Join MedCare{% endblock %}
+{% block subtitle %}Register{% endblock %}
 
 {% block content %}
-<div class="auth-wrapper" style="background-color: #f8fafd; padding: 3rem 1rem;">
-    <div class="auth-card animate-fade-up">
-        <!-- Sidebar Graphic -->
-        <div class="auth-sidebar d-none d-md-flex position-relative overflow-hidden" style="background: linear-gradient(135deg, #17a2b8 0%, #00f2fe 100%);">
-            <div class="position-relative" style="z-index: 2;">
-                <div class="badge rounded-pill bg-white text-info mb-4 px-3 py-2 fw-bold shadow-sm">
-                    MedCare
-                </div>
-                <h2 class="fw-bolder display-6 mb-3">Start your journey.</h2>
-                <p class="fs-5 opacity-75">Create an account to quickly access specialists and manage your appointments.</p>
-            </div>
-            <div class="position-absolute" style="width: 300px; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%; top: -50px; right: -50px;"></div>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh; padding: 40px 0;">
+    <div class="hms-card" style="width: 100%; max-width: 480px;">
+        
+        <div class="text-center mb-4">
+            <h1 style="font-size: 2rem; font-weight: 800; color: var(--hms-primary); letter-spacing: -1px; margin-bottom: 8px;">HMS</h1>
+            <p class="body-text mb-0">Create your account</p>
         </div>
 
-        <!-- Form Area -->
-        <div class="auth-form-area d-flex flex-column justify-content-center">
-            <div class="mb-4 text-center">
-                <h3 class="fw-bolder mb-2 text-dark">Register Account</h3>
-                <p class="text-muted">Join as a new patient</p>
+        <form method="POST">
+            <div class="mb-3">
+                <label class="hms-label" for="name">Full Name</label>
+                <input type="text" class="hms-input" id="name" name="username" placeholder="John Doe" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="hms-label" for="email">Email Address</label>
+                <input type="email" class="hms-input" id="email" name="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="hms-label" for="phone">Phone Number</label>
+                <input type="tel" class="hms-input" id="phone" name="phone" placeholder="+1 (555) 000-0000" required>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <label class="hms-label" for="password">Password</label>
+                    <input type="password" class="hms-input" id="password" name="pass" placeholder="••••••••" required>
+                </div>
+                <div class="col-6">
+                    <label class="hms-label" for="confirm_password">Confirm</label>
+                    <input type="password" class="hms-input" id="confirm_password" name="cpass" placeholder="••••••••" required>
+                </div>
             </div>
             
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="username" class="form-label fw-semibold text-muted small text-uppercase">Full Name</label>
-                    <input type="text" class="modern-input w-100" name="username" id="username" placeholder="John Doe" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label fw-semibold text-muted small text-uppercase">Email Address</label>
-                    <input type="email" class="modern-input w-100" name="email" id="email" placeholder="john@example.com" required>
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label fw-semibold text-muted small text-uppercase">Phone Number</label>
-                    <input type="text" class="modern-input w-100" name="phone" id="phone" placeholder="+123456789">
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="pass" class="form-label fw-semibold text-muted small text-uppercase">Password</label>
-                        <input type="password" class="modern-input w-100" name="pass" id="pass" placeholder="••••••••" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="cpass" class="form-label fw-semibold text-muted small text-uppercase">Confirm</label>
-                        <input type="password" class="modern-input w-100" name="cpass" id="cpass" placeholder="••••••••" required>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <button type="submit" class="btn modern-btn-primary w-100 py-3 rounded-pill fs-5 shadow-sm mb-3">Create Account</button>
-                    <p class="text-muted">Already registered? <a href="{{url_for('auth.login')}}" class="text-info fw-bold text-decoration-none">Sign in instead</a></p>
-                </div>
-            </form> 
+            <button type="submit" class="btn hms-btn-primary w-100 py-2" style="font-size: 1rem;">Create Account</button>
+        </form>
+
+        <div class="text-center mt-4 pt-4" style="border-top: 1px solid var(--hms-border);">
+            <span class="body-text" style="font-size: 0.875rem;">Already have an account? </span>
+            <a href="{{ url_for('auth.login') }}" style="color: var(--hms-primary); font-weight: 500; font-size: 0.875rem; text-decoration: none;">Sign in here</a>
         </div>
+        
     </div>
 </div>
 {% endblock %}
