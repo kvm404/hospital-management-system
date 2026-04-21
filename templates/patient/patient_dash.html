@@ -12,7 +12,7 @@
         </div>
         <div>
             <form method="GET" action="{{ url_for('patient.patient_search') }}" class="d-flex" style="max-width: 320px;">
-                <input type="text" class="hms-input" name="q" placeholder="Search doctors or departments..." style="border-top-right-radius: 0; border-bottom-right-radius: 0;" required>
+                <input type="text" class="hms-input" name="q" placeholder="Search doctors or departments..." style="border-top-right-radius: 0; border-bottom-right-radius: 0; width: 300px;" required>
                 <button class="btn hms-btn-primary" type="submit" style="border-top-left-radius: 0; border-bottom-left-radius: 0; white-space: nowrap;">
                     <i class="bi bi-search"></i>
                 </button>
@@ -37,7 +37,13 @@
                                     <div style="font-weight: 600; color: var(--hms-dark);">Dr. {{ ap.doctor.user.name }}</div>
                                     <div style="font-size: 0.8rem; color: var(--hms-muted);">{{ ap.doctor.department.name }}</div>
                                 </div>
-                                <span class="hms-badge hms-badge-info">Booked</span>
+                                {% if ap.status == 'booked' %}
+                                    <span class="hms-badge hms-badge-info">Booked</span>
+                                {% elif ap.status == 'completed' %}
+                                    <span class="hms-badge hms-badge-success">Completed</span>
+                                {% elif ap.status == 'cancelled' %}
+                                    <span class="hms-badge hms-badge-danger">Cancelled</span>
+                                {% endif %}
                             </div>
 
                             <div class="d-flex gap-3 mb-4" style="background-color: var(--hms-bg); border-radius: 8px; padding: 12px;">
@@ -47,15 +53,17 @@
                                 </div>
                                 <div class="flex-fill">
                                     <div class="label-caption" style="margin-bottom: 2px;">Time</div>
-                                    <div style="font-weight: 500; font-size: 0.875rem;">{% if ap.slot.time == 'morning' %}Morning{% else %}Evening{% endif %}</div>
+                                    <div style="font-weight: 500; font-size: 0.875rem;">{% if ap.slot.time == 'morning' %}8am - 12pm{% else %}4pm - 9pm{% endif %}</div>
                                 </div>
                             </div>
                             
+                            {% if ap.status == 'booked' %}
                             <div class="mt-auto pt-2">
                                 <form method="POST" action="{{ url_for('patient.cancel_appointment', id=ap.id) }}">
                                     <button class="btn btn-sm hms-btn-outline w-100" style="color: var(--hms-danger); border-color: var(--hms-danger); font-size: 0.875rem;" type="submit">Cancel Appointment</button>
                                 </form>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

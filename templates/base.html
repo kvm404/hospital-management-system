@@ -28,19 +28,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Center Links -->
                 <ul class="navbar-nav mx-auto align-items-lg-center">
-                    {% block navlinks %}
-                        {% if current_user.is_authenticated %}
-                            {% if current_user.role == 'patient' %}
-                                <li class="nav-item me-3"><a class="nav-link" href="{{ url_for('patient.patient_dashboard') }}">Dashboard</a></li>
-                                <li class="nav-item me-3"><a class="nav-link" href="{{ url_for('patient.patient_search') }}">Specialists</a></li>
-                            {% elif current_user.role == 'doctor' %}
-                                <li class="nav-item me-3"><a class="nav-link" href="{{ url_for('doctor.doctor_dashboard') }}">Dashboard</a></li>
-                                <li class="nav-item me-3"><a class="nav-link" href="{{ url_for('doctor.update_availability', user_id=current_user.id) }}">Schedule</a></li>
-                            {% elif current_user.role == 'admin' %}
-                                <li class="nav-item me-3"><a class="nav-link" href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a></li>
-                            {% endif %}
-                        {% endif %}
-                    {% endblock %}
                 </ul>
 
                 <!-- Right Side Profile/Auth -->
@@ -49,11 +36,11 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle fs-5"></i>
-                                <span>{{ current_user.name.split()[0] }}</span>
+                                <span>{% if current_user.role == 'admin' %}Admin{% else %}{{ current_user.name.split()[0] }}{% endif %}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3 mt-2" aria-labelledby="navbarDropdown">
                                 {% if current_user.role == 'patient' %}
-                                    <li><a class="dropdown-item py-2" href="{{ url_for('patient.edit_profile', id=current_user.id) }}"><i class="bi bi-gear me-2 text-muted"></i>Settings</a></li>
+                                    <li><a class="dropdown-item py-2" href="{{ url_for('patient.edit_profile', id=current_user.id) }}"><i class="bi bi-gear me-2 text-muted"></i>Edit Profile</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 {% endif %}
                                 <li><a class="dropdown-item py-2 text-danger" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>

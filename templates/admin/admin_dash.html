@@ -8,7 +8,7 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 pb-3" style="border-bottom: 1px solid var(--hms-border);">
         <div>
             <div class="label-caption mb-2">System Administrator</div>
-            <h2 class="page-title mb-1">Welcome back, {{ current_user.name.split(' ')[0] }}</h2>
+            <h2 class="page-title mb-1">Welcome back, Admin</h2>
             <p class="body-text mb-0">Overview of system operations and facility metrics.</p>
         </div>
         <div class="mt-4 mt-md-0 d-flex gap-3">
@@ -23,7 +23,7 @@
 
     <!-- Metrics Cards -->
     <div class="row g-4 mb-5">
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <div class="hms-card h-100 d-flex align-items-center">
                 <div class="hms-icon-circle hms-icon-circle-lg hms-icon-primary me-4">
                     <i class="bi bi-person-badge"></i>
@@ -35,7 +35,7 @@
             </div>
         </div>
         
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <div class="hms-card h-100 d-flex align-items-center">
                 <div class="hms-icon-circle hms-icon-circle-lg hms-icon-info me-4">
                     <i class="bi bi-people"></i>
@@ -47,7 +47,7 @@
             </div>
         </div>
         
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <div class="hms-card h-100 d-flex align-items-center">
                 <div class="hms-icon-circle hms-icon-circle-lg hms-icon-success me-4">
                     <i class="bi bi-clipboard2-pulse"></i>
@@ -55,6 +55,18 @@
                 <div>
                     <div class="label-caption">Total Treatments</div>
                     <div style="font-size: 1.75rem; font-weight: 700; color: var(--hms-dark);">{{ total_treatments }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="hms-card h-100 d-flex align-items-center">
+                <div class="hms-icon-circle hms-icon-circle-lg me-4" style="background-color: var(--hms-warning-bg); color: var(--hms-warning);">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div>
+                    <div class="label-caption">Today's Appointments</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; color: var(--hms-dark);">{{ todays_appointments }}</div>
                 </div>
             </div>
         </div>
@@ -68,16 +80,14 @@
                 Registered Doctors
             </h4>
             
-            <form method="GET" class="d-flex" style="max-width: 350px; width: 100%;">
-                <div class="input-group">
-                    <input type="text" class="hms-input" style="border-top-right-radius: 0; border-bottom-right-radius: 0; padding-right: 8px;" name="d" placeholder="Search Doctors..." value="{{ request.args.get('d', '') }}">
-                    <button class="btn hms-btn-outline" style="border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                    {% if request.args.get('d') %}
-                        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline" style="color: var(--hms-danger); border-color: var(--hms-danger); margin-left: 8px;">Clear</a>
-                    {% endif %}
-                </div>
+            <form method="GET" class="d-flex align-items-center flex-nowrap gap-2" style="max-width: 400px; width: 100%;">
+                <input type="text" class="hms-input" style="flex: 1; min-width: 0;" name="d" placeholder="Search Doctors..." value="{{ request.args.get('d', '') }}">
+                <button class="btn hms-btn-primary" type="submit" style="white-space: nowrap; padding: 10px 14px;">
+                    <i class="bi bi-search"></i>
+                </button>
+                {% if request.args.get('d') %}
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline" style="color: var(--hms-danger); border-color: var(--hms-danger); white-space: nowrap;">Clear</a>
+                {% endif %}
             </form>
         </div>
         
@@ -109,11 +119,11 @@
                                     <a href="{{ url_for('admin.edit_doctor', user_id=doc.user_id) }}" class="hms-btn-icon" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a href="{{ url_for('admin.toggle_block', user_id=doc.user_id) }}" class="hms-btn-icon" title="Toggle Block">
+                                    <a href="{{ url_for('admin.toggle_block', user_id=doc.user_id) }}" class="hms-btn-icon" title="{% if doc.user.is_blocked %}Unblock{% else %}Block{% endif %}">
                                         {% if doc.user.is_blocked %} 
-                                            <i class="bi bi-check-circle text-success"></i>
+                                            <i class="bi bi-lock-fill text-danger"></i>
                                         {% else %} 
-                                            <i class="bi bi-slash-circle text-warning"></i>
+                                            <i class="bi bi-unlock-fill text-success"></i>
                                         {% endif %}
                                     </a>
                                     <form action="{{ url_for('admin.delete_user', user_id=doc.user_id) }}" method="POST" class="d-inline-block">
@@ -141,16 +151,14 @@
                 Registered Patients
             </h4>
             
-            <form method="GET" class="d-flex" style="max-width: 350px; width: 100%;">
-                <div class="input-group">
-                    <input type="text" class="hms-input" style="border-top-right-radius: 0; border-bottom-right-radius: 0; padding-right: 8px;" name="p" placeholder="Search Patients..." value="{{ request.args.get('p', '') }}">
-                    <button class="btn hms-btn-outline" style="border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                    {% if request.args.get('p') %}
-                        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline" style="color: var(--hms-danger); border-color: var(--hms-danger); margin-left: 8px;">Clear</a>
-                    {% endif %}
-                </div>
+            <form method="GET" class="d-flex align-items-center flex-nowrap gap-2" style="max-width: 400px; width: 100%;">
+                <input type="text" class="hms-input" style="flex: 1; min-width: 0;" name="p" placeholder="Search Patients..." value="{{ request.args.get('p', '') }}">
+                <button class="btn hms-btn-primary" type="submit" style="white-space: nowrap; padding: 10px 14px;">
+                    <i class="bi bi-search"></i>
+                </button>
+                {% if request.args.get('p') %}
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline" style="color: var(--hms-danger); border-color: var(--hms-danger); white-space: nowrap;">Clear</a>
+                {% endif %}
             </form>
         </div>
         
@@ -176,11 +184,11 @@
                                     <a href="{{ url_for('patient.edit_profile', id=p.id) }}" class="hms-btn-icon" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a href="{{ url_for('admin.toggle_block', user_id=p.id) }}" class="hms-btn-icon" title="Toggle Block">
+                                    <a href="{{ url_for('admin.toggle_block', user_id=p.id) }}" class="hms-btn-icon" title="{% if p.is_blocked %}Unblock{% else %}Block{% endif %}">
                                         {% if p.is_blocked %} 
-                                            <i class="bi bi-check-circle text-success"></i>
+                                            <i class="bi bi-lock-fill text-danger"></i>
                                         {% else %} 
-                                            <i class="bi bi-slash-circle text-warning"></i>
+                                            <i class="bi bi-unlock-fill text-success"></i>
                                         {% endif %}
                                     </a>
                                     <form action="{{ url_for('admin.delete_user', user_id=p.id) }}" method="POST" class="d-inline-block">
@@ -224,7 +232,7 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div style="font-weight: 600; color: var(--hms-dark);">{{ ap.slot.date.strftime('%b %d, %Y') }}</div>
-                                        <div class="label-caption mt-1">{{ ap.slot.time }}</div>
+                                        <div class="label-caption mt-1">{% if ap.slot.time == 'morning' %}8am - 12pm{% else %}4pm - 9pm{% endif %}</div>
                                     </td>
                                     <td>
                                         <div style="font-weight: 500; color: var(--hms-primary);">Dr. {{ ap.doctor.user.name }}</div>
@@ -269,7 +277,7 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div style="font-weight: 600; color: var(--hms-dark);">{{ ap.slot.date.strftime('%b %d, %Y') }}</div>
-                                        <div class="label-caption mt-1">{{ ap.slot.time }}</div>
+                                        <div class="label-caption mt-1">{% if ap.slot.time == 'morning' %}8am - 12pm{% else %}4pm - 9pm{% endif %}</div>
                                     </td>
                                     <td>
                                         <div style="font-weight: 500; color: var(--hms-primary);">Dr. {{ ap.doctor.user.name }}</div>

@@ -15,6 +15,10 @@ def admin_dashboard():
     total_doctors = Doctor.query.count()
     total_patients = User.query.filter_by(role='patient').count()
     total_treatments = Treatment.query.count()
+    todays_appointments = Appointment.query.join(Slot).filter(
+        Slot.date == date.today(),
+        Appointment.status == 'booked'
+    ).count()
 
     # Doctor search
     d_query = request.args.get('d')
@@ -60,7 +64,8 @@ def admin_dashboard():
                            past_appointments=past_appointments,
                            total_doctors=total_doctors,
                            total_patients=total_patients,
-                           total_treatments=total_treatments)
+                           total_treatments=total_treatments,
+                           todays_appointments=todays_appointments)
 
 
 # ADD NEW DOCTOR
