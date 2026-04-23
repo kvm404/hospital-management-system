@@ -10,9 +10,15 @@
             <p class="body-text mb-0">Logged by Dr. {{ current_user.name }}</p>
         </div>
         <div>
-            <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
-                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
-            </a>
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Admin Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                </a>
+            {% endif %}
         </div>
     </div>
 

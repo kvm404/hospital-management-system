@@ -10,9 +10,12 @@
             <h2 class="page-title mb-1">Welcome back, {{ current_user.name.split(' ')[0] }}</h2>
             <p class="body-text mb-0">Your appointments and departments</p>
         </div>
-        <div>
-            <form method="GET" action="{{ url_for('patient.patient_search') }}" class="d-flex" style="max-width: 320px;">
-                <input type="text" class="hms-input" name="q" placeholder="Search doctors or departments..." style="border-top-right-radius: 0; border-bottom-right-radius: 0; width: 300px;" required>
+        <div class="d-flex align-items-center gap-3">
+            <a href="{{ url_for('patient.history', id=current_user.id) }}" class="btn hms-btn-outline" style="white-space: nowrap;">
+                <i class="bi bi-clock-history me-1"></i> Medical History
+            </a>
+            <form method="GET" action="{{ url_for('patient.patient_search') }}" class="d-flex">
+                <input type="text" class="hms-input" name="q" placeholder="Search doctors or departments..." style="border-top-right-radius: 0; border-bottom-right-radius: 0; width: 260px;" required>
                 <button class="btn hms-btn-primary" type="submit" style="border-top-left-radius: 0; border-bottom-left-radius: 0; white-space: nowrap;">
                     <i class="bi bi-search"></i>
                 </button>

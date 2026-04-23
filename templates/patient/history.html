@@ -10,9 +10,15 @@
             <p class="body-text mb-0">Your past treatments and records</p>
         </div>
         <div>
-            <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
-                <i class="bi bi-arrow-left me-1"></i> Dashboard
-            </a>
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Admin Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-outline" style="font-size: 0.875rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Dashboard
+                </a>
+            {% endif %}
         </div>
     </div>
 
