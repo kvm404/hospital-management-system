@@ -213,7 +213,7 @@ erDiagram
     User {
         int id PK
         string name
-        string email UK
+        string email
         string phone
         string role
         string password_hash
@@ -222,12 +222,12 @@ erDiagram
 
     Department {
         int id PK
-        string name UK
+        string name
         text description
     }
 
     Doctor {
-        int user_id PK_FK
+        int user_id FK
         int dept_id FK
         text description
     }
