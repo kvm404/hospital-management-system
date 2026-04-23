@@ -3,83 +3,225 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section style="padding: 100px 0 80px; background-color: var(--hms-surface);">
-    <div class="container text-center">
-        <div class="mb-4">
-            <span class="hms-badge" style="background-color: var(--hms-primary-light); color: var(--hms-primary); letter-spacing: 0.1em; font-size: 0.75rem;">HOSPITAL MANAGEMENT SYSTEM</span>
-        </div>
-        <h1 style="font-size: 3.5rem; font-weight: 800; color: var(--hms-dark); line-height: 1.1; margin-bottom: 24px;">
-            Manage your hospital,<br>simplified.
-        </h1>
-        <p class="mx-auto body-text" style="max-width: 540px; font-size: 1.125rem; margin-bottom: 48px;">
-            A unified interface for patients, doctors, and administrators. 
-            Experience secure and seamless operations across all your healthcare facilities.
-        </p>
-        
-        <div class="d-flex justify-content-center gap-3">
-            {% if current_user.is_authenticated %}
-                {% if current_user.role == 'patient' %}
-                    <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-primary px-4 py-2">Go to Dashboard</a>
-                {% elif current_user.role == 'doctor' %}
-                    <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-primary px-4 py-2">Go to Dashboard</a>
-                {% elif current_user.role == 'admin' %}
-                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-primary px-4 py-2">Go to Dashboard</a>
-                {% endif %}
-            {% else %}
-                <a href="{{ url_for('auth.register') }}" class="btn hms-btn-primary px-4 py-2" style="font-size: 1rem;">Register Patient</a>
-                <a href="{{ url_for('auth.login') }}" class="btn hms-btn-outline px-4 py-2" style="font-size: 1rem;">Sign In</a>
-            {% endif %}
+<section class="hms-hero">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <!-- Left: Text Content -->
+            <div class="col-lg-6">
+                <div class="hms-hero__badge mb-4">
+                    <i class="bi bi-heart-pulse me-2"></i> Trusted by patients across India
+                </div>
+                <h1 class="hms-hero__title">
+                    Find the right doctor, <span class="hms-hero__accent">right now.</span>
+                </h1>
+                <p class="hms-hero__subtitle">
+                    Connect with top specialists, book appointments instantly, and access your medical history securely — all from one place.
+                </p>
+                
+                <div class="d-flex flex-wrap gap-3 mb-5">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.role == 'patient' %}
+                            <a href="{{ url_for('patient.patient_dashboard') }}" class="btn hms-btn-primary hms-hero__cta">Go to Dashboard</a>
+                        {% elif current_user.role == 'doctor' %}
+                            <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn hms-btn-primary hms-hero__cta">Go to Dashboard</a>
+                        {% elif current_user.role == 'admin' %}
+                            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn hms-btn-primary hms-hero__cta">Go to Dashboard</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('auth.register') }}" class="btn hms-btn-primary hms-hero__cta">
+                            <i class="bi bi-calendar2-check me-2"></i>Book an Appointment
+                        </a>
+                        <a href="{{ url_for('auth.login') }}" class="btn hms-btn-outline hms-hero__cta">
+                            Patient Sign In
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Trust Indicators -->
+                <div class="hms-hero__trust">
+                    <div class="hms-hero__trust-item">
+                        <div class="hms-hero__trust-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <span>Verified Doctors</span>
+                    </div>
+                    <div class="hms-hero__trust-item">
+                        <div class="hms-hero__trust-icon">
+                            <i class="bi bi-lock"></i>
+                        </div>
+                        <span>Secure Records</span>
+                    </div>
+                    <div class="hms-hero__trust-item">
+                        <div class="hms-hero__trust-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <span>24/7 Access</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visual Composition -->
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hms-hero__visual">
+                    <!-- Floating UI Cards -->
+                    <div class="hms-hero__card hms-hero__card--main">
+                        <div class="hms-hero__card-header">
+                            <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <div class="ms-3">
+                                <div style="font-weight: 600; color: var(--hms-dark); font-size: 0.95rem;">Dr. Priya Mehta</div>
+                                <div style="font-size: 0.8rem; color: var(--hms-muted);">Cardiologist</div>
+                            </div>
+                        </div>
+                        <div class="hms-hero__card-slots">
+                            <div class="hms-hero__slot hms-hero__slot--available">
+                                <i class="bi bi-brightness-high me-1"></i> Morning
+                                <span class="ms-auto hms-badge hms-badge-success" style="font-size: 0.65rem;">Available</span>
+                            </div>
+                            <div class="hms-hero__slot hms-hero__slot--booked">
+                                <i class="bi bi-moon-stars me-1"></i> Evening
+                                <span class="ms-auto hms-badge hms-badge-warning" style="font-size: 0.65rem;">1 slot left</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hms-hero__card hms-hero__card--float-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="hms-icon-circle hms-icon-circle-md hms-icon-success">
+                                <i class="bi bi-check-lg"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.85rem; color: var(--hms-dark);">Appointment Confirmed</div>
+                                <div style="font-size: 0.75rem; color: var(--hms-muted);">Apr 24, 8am - 12pm</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hms-hero__card hms-hero__card--float-2">
+                        <div class="d-flex align-items-center gap-3">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--hms-primary);">500+</div>
+                                <div style="font-size: 0.7rem; color: var(--hms-muted);">Patients</div>
+                            </div>
+                            <div style="width: 1px; height: 32px; background: var(--hms-border);"></div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--hms-primary);">300+</div>
+                                <div style="font-size: 0.7rem; color: var(--hms-muted);">Treatments</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- Features Section -->
-<section style="padding: 80px 0; background-color: var(--hms-bg);">
+<section class="hms-features">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-heading mb-0" style="font-size: 1.75rem;">Built for modern healthcare</h2>
+        <div class="text-center mb-5 pb-2">
+            <div class="label-caption mb-3" style="color: var(--hms-primary);">WHY CHOOSE HMS</div>
+            <h2 style="font-size: 2rem; font-weight: 700; color: var(--hms-dark);">
+                Everything you need, in one place
+            </h2>
+            <p class="body-text mx-auto mt-3" style="max-width: 520px;">
+                From finding the right specialist to reviewing your medical history — we make healthcare simple and accessible.
+            </p>
         </div>
         
         <div class="row g-4 justify-content-center">
-            <!-- Feature 1 -->
+            <!-- Feature 1: Search -->
             <div class="col-md-4">
-                <div class="hms-card h-100" style="transition: border-color 0.2s;">
-                    <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary mb-4">
-                        <i class="bi bi-building"></i>
+                <div class="hms-feature-card">
+                    <div class="hms-feature-card__icon hms-feature-card__icon--blue">
+                        <i class="bi bi-search"></i>
                     </div>
-                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px; color: var(--hms-dark);">Administration</h3>
-                    <p class="body-text mb-0">
-                        Efficiently manage staff roles, hospital departments, and monitor overall facility metrics in one secure place.
+                    <h3 class="hms-feature-card__title">Search Specialists</h3>
+                    <p class="hms-feature-card__text">
+                        Browse our directory of experienced doctors across multiple departments. Filter by specialty and find the right match for your needs.
                     </p>
                 </div>
             </div>
             
-            <!-- Feature 2 -->
+            <!-- Feature 2: Booking -->
             <div class="col-md-4">
-                <div class="hms-card h-100" style="transition: border-color 0.2s;">
-                    <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary mb-4">
-                        <i class="bi bi-calendar3"></i>
+                <div class="hms-feature-card">
+                    <div class="hms-feature-card__icon hms-feature-card__icon--green">
+                        <i class="bi bi-calendar2-check"></i>
                     </div>
-                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px; color: var(--hms-dark);">Scheduling</h3>
-                    <p class="body-text mb-0">
-                        Doctors can rapidly update their availability, viewing assigned shifts and patient workloads securely.
+                    <h3 class="hms-feature-card__title">Instant Booking</h3>
+                    <p class="hms-feature-card__text">
+                        See real-time availability and book your slot in seconds — no phone calls, no waiting. Morning or evening, your choice.
                     </p>
                 </div>
             </div>
             
-            <!-- Feature 3 -->
+            <!-- Feature 3: History -->
             <div class="col-md-4">
-                <div class="hms-card h-100" style="transition: border-color 0.2s;">
-                    <div class="hms-icon-circle hms-icon-circle-md hms-icon-primary mb-4">
-                        <i class="bi bi-calendar-check"></i>
+                <div class="hms-feature-card">
+                    <div class="hms-feature-card__icon hms-feature-card__icon--purple">
+                        <i class="bi bi-clipboard2-pulse"></i>
                     </div>
-                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 12px; color: var(--hms-dark);">Patient Booking</h3>
-                    <p class="body-text mb-0">
-                        Patients can easily browse departments, find verified specialists, and book appointments without the hassle.
+                    <h3 class="hms-feature-card__title">Medical History</h3>
+                    <p class="hms-feature-card__text">
+                        Access your past treatments, prescriptions, diagnoses, and test notes securely in one place — anytime you need them.
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- How It Works Section -->
+<section style="padding: 80px 0; background-color: var(--hms-surface);">
+    <div class="container">
+        <div class="text-center mb-5 pb-2">
+            <div class="label-caption mb-3" style="color: var(--hms-primary);">HOW IT WORKS</div>
+            <h2 style="font-size: 2rem; font-weight: 700; color: var(--hms-dark);">
+                Three steps to better care
+            </h2>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4 text-center">
+                <div class="hms-step-number">1</div>
+                <h4 style="font-weight: 600; color: var(--hms-dark); margin-bottom: 8px; font-size: 1.1rem;">Create Your Account</h4>
+                <p class="body-text mb-0" style="font-size: 0.9rem;">Sign up in under a minute with your name, email, and phone number.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="hms-step-number">2</div>
+                <h4 style="font-weight: 600; color: var(--hms-dark); margin-bottom: 8px; font-size: 1.1rem;">Find a Specialist</h4>
+                <p class="body-text mb-0" style="font-size: 0.9rem;">Browse departments or search by name to find the right doctor for you.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="hms-step-number">3</div>
+                <h4 style="font-weight: 600; color: var(--hms-dark); margin-bottom: 8px; font-size: 1.1rem;">Book & Visit</h4>
+                <p class="body-text mb-0" style="font-size: 0.9rem;">Pick an available slot, confirm your booking, and show up — it's that simple.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not current_user.is_authenticated %}
+<section class="hms-cta-section">
+    <div class="container text-center">
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--hms-dark); margin-bottom: 16px;">
+            Ready to take charge of your health?
+        </h2>
+        <p class="body-text mx-auto mb-4" style="max-width: 480px;">
+            Join thousands of patients who book appointments and manage their healthcare with HMS.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('auth.register') }}" class="btn hms-btn-primary px-4 py-2" style="font-size: 1rem;">
+                Get Started Free
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn hms-btn-outline px-4 py-2" style="font-size: 1rem;">
+                Sign In
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}

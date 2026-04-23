@@ -74,7 +74,7 @@ def check_availability(doctor_id):
 
     if request.method == 'POST':
         slot_id = request.form.get('slot_id')
-        slot = Slot.query.get(slot_id)
+        slot = db.session.get(Slot, slot_id)
         if not slot:
             flash("Slot not found!", "danger")
             return redirect(url_for('patient.check_availability', doctor_id=doctor_id))
